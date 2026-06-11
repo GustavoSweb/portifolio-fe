@@ -36,12 +36,17 @@ export default function BlogSection() {
 
   useGSAP(
     () => {
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        pin: true,
-        start: "top top",
-        end: "+=600",
-        pinSpacing: true,
+      const mm = gsap.matchMedia();
+
+      // Pin only on desktop
+      mm.add("(min-width: 1024px)", () => {
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          pin: true,
+          start: "top top",
+          end: "+=600",
+          pinSpacing: true,
+        });
       });
 
       gsap.from(".blog-title", {
@@ -65,31 +70,31 @@ export default function BlogSection() {
   );
 
   return (
-    <section ref={containerRef} className="w-full bg-bg mt-32 min-h-svh snap-start">
-      <div className="content-wrap pb-20">
-        <p className="blog-title font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap pb-8 pt-6">
+    <section ref={containerRef} className="w-full bg-bg mt-16 lg:mt-32 lg:min-h-svh snap-start">
+      <div className="content-wrap pb-12 lg:pb-20">
+        <p className="blog-title font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap pb-6 lg:pb-8 pt-6">
           Blog
         </p>
 
-        <div className="blog-grid grid grid-cols-2 gap-x-8">
+        <div className="blog-grid grid grid-cols-1 lg:grid-cols-2 gap-x-8">
           {ARTICLES.map((article, i) => (
             <a key={i} href="#" className="blog-item group flex flex-col gap-[10px] pb-[10px]">
               <div className="flex items-center justify-between gap-4 pb-[10px] border-b border-white/12">
                 <div className="grid">
-                  <p className="font-sans font-bold text-2xl text-white tracking-[-0.25px] leading-none mb-2 transition-colors group-hover:text-lime">
+                  <p className="font-sans font-bold text-xl lg:text-2xl text-white tracking-[-0.25px] leading-none mb-2 transition-colors group-hover:text-lime">
                     {article.title}
                   </p>
-                  <p className="font-sans text-base text-white/60 tracking-[-0.25px] leading-[1.5] max-w-[365px]">
+                  <p className="font-sans text-sm lg:text-base text-white/60 tracking-[-0.25px] leading-[1.5] max-w-full lg:max-w-[365px]">
                     {article.excerpt}
                   </p>
                 </div>
-                <div className="shrink-0 w-[98px] h-[98px]">
+                <div className="shrink-0 w-[56px] h-[56px] lg:w-[98px] lg:h-[98px]">
                   <Image
                     src="/arrow-right.svg"
                     alt="Ler artigo"
                     width={98}
                     height={98}
-                    className="group-hover:scale-110 transition-transform duration-200"
+                    className="w-full h-full group-hover:scale-110 transition-transform duration-200"
                   />
                 </div>
               </div>

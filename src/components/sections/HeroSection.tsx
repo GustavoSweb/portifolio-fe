@@ -28,9 +28,22 @@ export default function HeroSection() {
 
   return (
     <section ref={containerRef} className="w-full bg-bg relative overflow-hidden min-h-svh">
-      <div className="content-wrap py-16 min-h-svh grid grid-cols-[880fr_784fr] gap-0 relative z-10">
-        {/* ── Left column ── */}
-        <div className="flex flex-col justify-between pb-4">
+      <div className="content-wrap py-10 lg:py-16 min-h-svh flex flex-col lg:grid lg:grid-cols-[880fr_784fr] gap-6 lg:gap-0 relative z-10">
+
+        {/* ── Photo — above text on mobile ── */}
+        <div className="hero-photo relative rounded-2xl lg:rounded-3xl overflow-hidden h-[260px] order-1 lg:order-2 lg:h-auto">
+          <Image
+            src="/photo.jpg"
+            alt="Gustavo Rodrigues"
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="(max-width: 1023px) 100vw, (max-width: 1728px) 45vw, 784px"
+          />
+        </div>
+
+        {/* ── Left column — text ── */}
+        <div className="flex flex-col justify-between pb-4 order-2 lg:order-1">
           <div>
             <h1
               aria-label="Gustavo"
@@ -50,40 +63,40 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="flex justify-between items-end">
+          <div className="flex flex-col gap-6 mt-8 lg:mt-0 lg:flex-row lg:justify-between lg:items-end">
             <div>
-              <p className="hero-desc font-sans font-medium text-base text-white/80 max-w-[308px] leading-6 tracking-[0.15px] mb-8">
+              <p className="hero-desc font-sans font-medium text-base text-white/80 max-w-[308px] leading-6 tracking-[0.15px] mb-6 lg:mb-8">
                 A imaginação é mais importante que o conhecimento — construo experiências digitais
                 com foco em performance e design.
               </p>
 
-              <div className="flex gap-4 items-start">
+              <div className="flex gap-3 lg:gap-4 items-start">
                 <a
                   href="https://github.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hero-social flex items-center justify-center overflow-hidden w-[94px] h-[94px] bg-orange"
+                  className="hero-social flex items-center justify-center overflow-hidden w-16 h-16 lg:w-[94px] lg:h-[94px] bg-orange"
                 >
-                  <Image src="/icon-github.png" alt="GitHub" width={70} height={69} />
+                  <Image src="/icon-github.png" alt="GitHub" width={44} height={43} className="lg:w-[70px] lg:h-[69px]" />
                 </a>
                 <a
                   href="https://linkedin.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hero-social flex  items-center justify-center overflow-hidden w-[94px] h-[94px] bg-orange"
+                  className="hero-social flex items-center justify-center overflow-hidden w-16 h-16 lg:w-[94px] lg:h-[94px] bg-orange"
                 >
-                  <Image src="/icon-linkedin.png" alt="LinkedIn" width={82} height={71} />
+                  <Image src="/icon-linkedin.png" alt="LinkedIn" width={50} height={44} className="lg:w-[82px] lg:h-[71px]" />
                 </a>
                 <a
                   href="mailto:gustavord@email.com"
-                  className="hero-social flex items-center justify-center overflow-hidden w-[94px] h-[94px] bg-orange"
+                  className="hero-social flex items-center justify-center overflow-hidden w-16 h-16 lg:w-[94px] lg:h-[94px] bg-orange"
                 >
-                  <Image src="/icon-gmail.svg" alt="Email" width={71} height={53} />
+                  <Image src="/icon-gmail.svg" alt="Email" width={44} height={33} className="lg:w-[71px] lg:h-[53px]" />
                 </a>
               </div>
             </div>
 
-            <div className="hero-arrow">
+            <div className="hero-arrow hidden lg:block">
               <Image
                 src="/arrow-hero.svg"
                 alt="Ver projetos"
@@ -95,17 +108,6 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* ── Right column: Photo ── */}
-        <div className="hero-photo relative rounded-3xl overflow-hidden">
-          <Image
-            src="/photo.jpg"
-            alt="Gustavo Rodrigues"
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="(max-width: 1728px) 45vw, 784px"
-          />
-        </div>
       </div>
     </section>
   );

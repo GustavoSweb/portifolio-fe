@@ -32,16 +32,17 @@ export default function Footer() {
   return (
     <footer
       ref={containerRef}
-      className="w-full bg-[rgba(0,52,39,0.95)] relative overflow-hidden mt-[128px]"
+      className="w-full bg-[rgba(0,52,39,0.95)] relative overflow-hidden mt-16 lg:mt-[128px]"
     >
-      <div className="absolute pointer-events-none left-[43%] top-[52px] w-[328px] h-[215px]">
+      <div className="absolute pointer-events-none left-[43%] top-[52px] w-[328px] h-[215px] hidden lg:block">
         <Image src="/vector-waves.svg" alt="" width={328} height={215} />
       </div>
 
-      <div className="content-wrap pt-16 relative z-10">
-        <div className="grid grid-cols-[244px_200px_1fr_auto] gap-20 items-start">
-          {/* Brand */}
-          <div className="footer-col">
+      <div className="content-wrap pt-10 lg:pt-16 relative z-10">
+        <div className="grid grid-cols-2 lg:grid-cols-[244px_200px_1fr_auto] gap-8 lg:gap-20 items-start">
+
+          {/* Brand — full width on mobile */}
+          <div className="footer-col col-span-2 lg:col-span-1">
             <p className="font-display text-2xl text-white tracking-[-0.25px] uppercase whitespace-nowrap mb-4">
               GUSTAVO
             </p>
@@ -73,7 +74,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div className="footer-col">
-            <p className="font-display text-2xl text-white tracking-[-0.25px] uppercase whitespace-nowrap mb-8">
+            <p className="font-display text-2xl text-white tracking-[-0.25px] uppercase whitespace-nowrap mb-6 lg:mb-8">
               NAVEGAÇÃO
             </p>
             <nav className="flex flex-col gap-4">
@@ -89,8 +90,8 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Spacer */}
-          <div />
+          {/* Spacer — desktop only */}
+          <div className="hidden lg:block" />
 
           {/* Back-to-top */}
           <div className="footer-col self-start">
@@ -104,11 +105,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/12 mt-20 py-6 flex justify-between items-center">
-          <p className="font-sans text-base text-white/40 tracking-[-0.25px] uppercase">
+        <div className="border-t border-white/12 mt-10 lg:mt-20 py-6 flex flex-col gap-1 lg:flex-row lg:justify-between lg:items-center">
+          <p className="font-sans text-sm lg:text-base text-white/40 tracking-[-0.25px] uppercase">
             © 2026 Gustavo da Silva Rodrigues.
           </p>
-          <p className="font-sans text-base text-white/40 tracking-[-0.25px]">
+          <p className="font-sans text-sm lg:text-base text-white/40 tracking-[-0.25px]">
             All Rights Reserved.
           </p>
         </div>

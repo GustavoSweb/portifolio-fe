@@ -20,49 +20,49 @@ export default function ProjectsSection() {
     );
     if (!els.length) return;
 
-    // Estado inicial imediato — garante transparência antes do trigger
-    gsap.set(els, {
-      opacity: 0,
-      x: (_i: number, el: SVGGraphicsElement) => (el.getBBox().x + el.getBBox().width  / 2 - SVG_CX) * 0.5,
-      y: (_i: number, el: SVGGraphicsElement) => (el.getBBox().y + el.getBBox().height / 2 - SVG_CY) * 0.5,
-    });
-    gsap.set(".projects-label", { x: -60, opacity: 0 });
+    const mm = gsap.matchMedia();
 
-    // Animação scrub: polígonos voam para a posição final
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        pin: true,
-        start: "top top",
-        end: "+=900",
-        scrub: 1.5,
-      },
-    });
+    // Desktop: pin + scrub assembly + hover
+    mm.add("(min-width: 1024px)", () => {
+      gsap.set(els, {
+        opacity: 0,
+        x: (_i: number, el: SVGGraphicsElement) => (el.getBBox().x + el.getBBox().width  / 2 - SVG_CX) * 0.5,
+        y: (_i: number, el: SVGGraphicsElement) => (el.getBBox().y + el.getBBox().height / 2 - SVG_CY) * 0.5,
+      });
+      gsap.set(".projects-label", { x: -60, opacity: 0 });
 
-    tl.to(els, { x: 0, y: 0, opacity: 1, stagger: 0.12, duration: 1, ease: "power2.out" }, 0);
-    tl.to(".projects-label", { x: 0, opacity: 1, duration: 0.6 }, 0);
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          pin: true,
+          start: "top top",
+          end: "+=900",
+          scrub: 1.5,
+        },
+      });
 
-    // Hover: só fill + scale no polígono hovered — sem tocar em opacity (conflita com scrub)
-    els.forEach((el) => {
-      el.addEventListener("mouseenter", () => {
-        gsap.to(el, {
-          fill: "#ffffff",
-          scale: 1.06,
-          transformOrigin: "center center",
-          duration: 0.2,
-          ease: "power2.out",
-          overwrite: "auto",
+      tl.to(els, { x: 0, y: 0, opacity: 1, stagger: 0.12, duration: 1, ease: "power2.out" }, 0);
+      tl.to(".projects-label", { x: 0, opacity: 1, duration: 0.6 }, 0);
+
+      els.forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          gsap.to(el, { fill: "#ffffff", scale: 1.06, transformOrigin: "center center", duration: 0.2, ease: "power2.out", overwrite: "auto" });
+        });
+        el.addEventListener("mouseleave", () => {
+          gsap.to(el, { fill: "#F3F293", scale: 1, transformOrigin: "center center", duration: 0.35, ease: "power2.inOut", overwrite: "auto" });
         });
       });
-      el.addEventListener("mouseleave", () => {
-        gsap.to(el, {
-          fill: "#F3F293",
-          scale: 1,
-          transformOrigin: "center center",
-          duration: 0.35,
-          ease: "power2.inOut",
-          overwrite: "auto",
-        });
+    });
+
+    // Mobile: simple fade-in, no pin
+    mm.add("(max-width: 1023px)", () => {
+      gsap.from(els, {
+        opacity: 0,
+        scale: 0.92,
+        stagger: 0.04,
+        duration: 0.5,
+        ease: "power2.out",
+        scrollTrigger: { trigger: containerRef.current, start: "top 80%" },
       });
     });
   }, { scope: containerRef });
@@ -70,20 +70,18 @@ export default function ProjectsSection() {
   return (
     <section
       ref={containerRef}
-      className="w-full bg-bg mt-32"
-      style={{ minHeight: "100svh" }}
+      className="w-full bg-bg mt-16 lg:mt-32 min-h-[60vw] lg:min-h-svh"
     >
-      <div className="max-w-[1728px] mx-auto pl-[55px] flex items-center gap-[14px] h-[888px]">
+      {/* Mobile: stack label + SVG; Desktop: side-by-side with fixed height */}
+      <div className="flex flex-col lg:flex-row lg:items-center max-w-[1728px] mx-auto px-5 md:px-8 lg:pl-[55px] lg:pr-0 gap-4 lg:gap-[14px] py-8 lg:py-0 lg:h-[888px]">
 
-        {/* Vertical "PROJETOS" label */}
-        <div className="projects-label shrink-0 flex items-center justify-center w-[48px] h-[201px]">
-          <p className="font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap -rotate-90">
+        <div className="projects-label shrink-0 flex items-center lg:justify-center w-auto lg:w-[48px] lg:h-[201px]">
+          <p className="font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap lg:-rotate-90">
             PROJETOS
           </p>
         </div>
 
-        {/* Mosaic inline SVG — cada path é um polígono animável */}
-        <div className="relative flex-1 h-[888px]">
+        <div className="relative flex-1 w-full lg:h-[888px]" style={{ aspectRatio: "1494/888" }}>
           <svg
             ref={svgRef}
             viewBox="0 0 1494 888"

@@ -34,8 +34,14 @@
   max-width: 1728px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 4rem;
-  padding-right: 4rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+@media (min-width: 768px) {
+  .content-wrap { padding-left: 2rem; padding-right: 2rem; }
+}
+@media (min-width: 1024px) {
+  .content-wrap { padding-left: 4rem; padding-right: 4rem; }
 }
 
 *, *::before, *::after {
