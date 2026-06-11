@@ -38,7 +38,7 @@ export default function BlogSection() {
     () => {
       const mm = gsap.matchMedia();
 
-      // Pin only on desktop
+      // Pin + navegação direta entre Projects ↔ Blog (desktop)
       mm.add("(min-width: 1024px)", () => {
         ScrollTrigger.create({
           trigger: containerRef.current,
@@ -46,6 +46,11 @@ export default function BlogSection() {
           start: "top top",
           end: "+=600",
           pinSpacing: true,
+          // Subindo de Blog → vai direto para Projects
+          onLeaveBack: () => {
+            const el = document.getElementById("projects-section");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+          },
         });
       });
 
@@ -70,7 +75,7 @@ export default function BlogSection() {
   );
 
   return (
-    <section ref={containerRef} className="w-full bg-bg mt-16 lg:mt-32 lg:min-h-svh snap-start">
+    <section ref={containerRef} id="blog-section" className="w-full bg-bg mt-16 lg:mt-32 lg:min-h-svh snap-start">
       <div className="content-wrap pb-12 lg:pb-20">
         <p className="blog-title font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap pb-6 lg:pb-8 pt-6">
           Blog
