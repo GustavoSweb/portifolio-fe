@@ -29,8 +29,6 @@ export default function HeroSection() {
   return (
     <section ref={containerRef} className="w-full bg-bg relative overflow-hidden min-h-svh">
       <div className="content-wrap py-10 lg:py-16 min-h-svh flex flex-col lg:grid lg:grid-cols-[880fr_784fr] gap-6 lg:gap-0 relative z-10">
-
-        {/* ── Photo — above text on mobile ── */}
         <div className="hero-photo relative rounded-2xl lg:rounded-3xl overflow-hidden h-[260px] order-1 lg:order-2 lg:h-auto">
           <Image
             src="/photo.jpg"
@@ -42,7 +40,6 @@ export default function HeroSection() {
           />
         </div>
 
-        {/* ── Left column — text ── */}
         <div className="flex flex-col justify-between pb-4 order-2 lg:order-1">
           <div>
             <h1
@@ -72,26 +69,44 @@ export default function HeroSection() {
 
               <div className="flex gap-3 lg:gap-4 items-start">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/GustavoSweb"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hero-social flex items-center justify-center overflow-hidden w-16 h-16 lg:w-[94px] lg:h-[94px] bg-orange"
                 >
-                  <Image src="/icon-github.png" alt="GitHub" width={44} height={43} className="lg:w-[70px] lg:h-[69px]" />
+                  <Image
+                    src="/icon-github.svg"
+                    alt="GitHub"
+                    width={44}
+                    height={43}
+                    className="lg:w-[70px] lg:h-[69px]"
+                  />
                 </a>
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/gustavo-rodrigues-5a7551252/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hero-social flex items-center justify-center overflow-hidden w-16 h-16 lg:w-[94px] lg:h-[94px] bg-orange"
                 >
-                  <Image src="/icon-linkedin.png" alt="LinkedIn" width={50} height={44} className="lg:w-[82px] lg:h-[71px]" />
+                  <Image
+                    src="/icon-linkedin.svg"
+                    alt="LinkedIn"
+                    width={50}
+                    height={44}
+                    className="lg:w-[82px] lg:h-[71px]"
+                  />
                 </a>
                 <a
-                  href="mailto:gustavord@email.com"
+                  href="mailto:gustavodasilvama10@gmail.com"
                   className="hero-social flex items-center justify-center overflow-hidden w-16 h-16 lg:w-[94px] lg:h-[94px] bg-orange"
                 >
-                  <Image src="/icon-gmail.svg" alt="Email" width={44} height={33} className="lg:w-[71px] lg:h-[53px]" />
+                  <Image
+                    src="/icon-gmail.svg"
+                    alt="Email"
+                    width={44}
+                    height={33}
+                    className="lg:w-[71px] lg:h-[53px]"
+                  />
                 </a>
               </div>
             </div>
@@ -107,7 +122,6 @@ export default function HeroSection() {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );

@@ -40,7 +40,6 @@ export default function Footer() {
 
       <div className="content-wrap pt-10 lg:pt-16 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-[244px_200px_1fr_auto] gap-8 lg:gap-20 items-start">
-
           {/* Brand — full width on mobile */}
           <div className="footer-col col-span-2 lg:col-span-1">
             <p className="font-display text-2xl text-white tracking-[-0.25px] uppercase whitespace-nowrap mb-4">
@@ -52,19 +51,19 @@ export default function Footer() {
             </p>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="https://github.com/GustavoSweb"
                 className="flex items-center justify-center overflow-hidden w-[50px] h-[50px] bg-orange"
               >
-                <Image src="/icon-github.png" alt="GitHub" width={28} height={27} />
+                <Image src="/icon-github.svg" alt="GitHub" width={28} height={27} />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/in/gustavo-rodrigues-5a7551252/"
                 className="flex items-center justify-center overflow-hidden w-[50px] h-[50px] bg-orange"
               >
-                <Image src="/icon-linkedin.png" alt="LinkedIn" width={28} height={24} />
+                <Image src="/icon-linkedin.svg" alt="LinkedIn" width={28} height={24} />
               </a>
               <a
-                href="mailto:"
+                href="mailto:gustavodasilvama10@gmail.com"
                 className="flex items-center justify-center overflow-hidden w-[50px] h-[50px] bg-orange"
               >
                 <Image src="/icon-gmail.svg" alt="Email" width={32} height={24} />
