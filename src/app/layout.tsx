@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bubblegum_Sans, Roboto, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const bubblegum = Bubblegum_Sans({
@@ -37,6 +38,7 @@ export default function RootLayout({
       className={`${bubblegum.variable} ${roboto.variable} ${robotoCondensed.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
+        <Header />
         {children}
         <Footer />
       </body>

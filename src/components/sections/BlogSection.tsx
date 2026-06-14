@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -33,7 +33,6 @@ const ARTICLES = [
 
 export default function BlogSection() {
   const containerRef = useRef<HTMLElement>(null);
-
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
@@ -75,7 +74,11 @@ export default function BlogSection() {
   );
 
   return (
-    <section ref={containerRef} id="blog-section" className="w-full bg-bg mt-16 lg:mt-32 lg:min-h-svh snap-start">
+    <section
+      ref={containerRef}
+      id="blog-section"
+      className="w-full bg-bg mt-16 lg:mt-32 lg:min-h-svh snap-start"
+    >
       <div className="content-wrap pb-12 lg:pb-20">
         <p className="blog-title font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap pb-6 lg:pb-8 pt-6">
           Blog
@@ -93,7 +96,7 @@ export default function BlogSection() {
                     {article.excerpt}
                   </p>
                 </div>
-                <div className="shrink-0 w-[56px] h-[56px] lg:w-[98px] lg:h-[98px]">
+                <div className="shrink-0 w-[56px] h-[56px] lg:w-[98px] lg:h-[98px] transition-transform duration-300 ease-out group-hover:-rotate-45">
                   <Image
                     src="/arrow-right.svg"
                     alt="Ler artigo"
