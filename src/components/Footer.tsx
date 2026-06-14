@@ -40,7 +40,6 @@ export default function Footer() {
 
       <div className="content-wrap pt-10 lg:pt-16 relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-[244px_200px_1fr_auto] gap-8 lg:gap-20 items-start">
-          {/* Brand — full width on mobile */}
           <div className="footer-col col-span-2 lg:col-span-1">
             <p className="font-display text-2xl text-white tracking-[-0.25px] uppercase whitespace-nowrap mb-4">
               GUSTAVO
@@ -71,7 +70,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Navigation */}
           <div className="footer-col">
             <p className="font-display text-2xl text-white tracking-[-0.25px] uppercase whitespace-nowrap mb-6 lg:mb-8">
               NAVEGAÇÃO
@@ -89,10 +87,8 @@ export default function Footer() {
             </nav>
           </div>
 
-          {/* Spacer — desktop only */}
           <div className="hidden lg:block" />
 
-          {/* Back-to-top */}
           <div className="footer-col self-start">
             <button
               onClick={scrollToTop}
