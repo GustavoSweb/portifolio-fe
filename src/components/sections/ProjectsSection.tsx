@@ -22,6 +22,7 @@ export default function ProjectsSection() {
   const setIsVisible = useHeaderStore((s) => s.setIsVisible);
 
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useGSAP(
     () => {
@@ -58,13 +59,20 @@ export default function ProjectsSection() {
             start: "top top",
             end: "+=900",
             scrub: 1.5,
+            onEnter: () => setIsVisible(false),
+            onEnterBack: () => setIsVisible(false),
             onLeave: () => {
+              setIsVisible(true);
               const el = document.getElementById("blog-section");
               if (el) el.scrollIntoView({ behavior: "smooth" });
             },
             onLeaveBack: () => {
+              setIsVisible(true);
               const el = document.getElementById("about-section");
               if (el) el.scrollIntoView({ behavior: "smooth" });
+            },
+            onUpdate: (self) => {
+              setIsScrolled(self.progress > 0.01);
             },
           },
         });
@@ -248,6 +256,27 @@ export default function ProjectsSection() {
           </svg>
         </div>
       </div>
+
+      {!isScrolled && (
+        <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none flex flex-col items-center justify-end pb-4 gap-1">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            className="animate-bounce opacity-50"
+          >
+            <path
+              d="M10 4v12M10 16l-4-4M10 16l4-4"
+              stroke="#FFFFFF"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span className="font-sans text-[10px] uppercase tracking-[0.2em]">scroll</span>
+        </div>
+      )}
     </section>
   );
 }

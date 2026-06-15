@@ -4,11 +4,11 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Image from "next/image";
-import {useTranslations} from 'next-intl';
+import { useTranslations } from "next-intl";
 
 export default function HeroSection() {
   const containerRef = useRef<HTMLElement>(null);
-  const t = useTranslations('Hero');
+  const t = useTranslations("Hero");
 
   useGSAP(
     () => {
@@ -29,8 +29,8 @@ export default function HeroSection() {
   );
 
   return (
-    <section ref={containerRef} className="w-full bg-bg relative overflow-hidden min-h-svh">
-      <div className="content-wrap py-10 lg:py-16 !pt-0 min-h-svh flex flex-col lg:grid lg:grid-cols-[880fr_784fr] gap-6 lg:gap-0 relative z-10">
+    <section ref={containerRef} className="w-full bg-bg relative overflow-hidden min-h-[90svh]">
+      <div className="content-wrap py-10 lg:py-16 !pt-0 min-h-[97svh] flex flex-col lg:grid lg:grid-cols-[880fr_784fr] gap-6 lg:gap-0 relative z-10">
         <div className="hero-photo relative rounded-2xl lg:rounded-3xl overflow-hidden h-[260px] order-1 lg:order-2 lg:h-auto">
           <Image
             src="/photo.jpg"
@@ -42,22 +42,24 @@ export default function HeroSection() {
           />
         </div>
 
-        <div className="flex flex-col justify-between pb-4 order-2 lg:order-1">
+        <div className="flex flex-col justify-between order-2 lg:order-1">
           <div>
             <h1
-              aria-label={t('title')}
+              aria-label={t("title")}
               className="font-display text-[clamp(3rem,10.2vw,11rem)] leading-none tracking-[-0.25px] uppercase whitespace-nowrap"
             >
-              {t('title').split("").map((l, i) => (
-                <span key={i} className="inline-block overflow-hidden leading-none align-bottom">
-                  <span className="hero-letter inline-block">{l}</span>
-                </span>
-              ))}
+              {t("title")
+                .split("")
+                .map((l, i) => (
+                  <span key={i} className="inline-block overflow-hidden leading-none align-bottom">
+                    <span className="hero-letter inline-block">{l}</span>
+                  </span>
+                ))}
             </h1>
 
             <div className="hero-sub flex items-center gap-3 mt-4">
               <p className="font-condensed wdth-condensed font-normal italic text-[clamp(0.9rem,1.4vw,1.5rem)] text-white/85 uppercase tracking-[-0.25px]">
-                {t('subtitle')}
+                {t("subtitle")}
               </p>
             </div>
           </div>
@@ -65,7 +67,7 @@ export default function HeroSection() {
           <div className="flex flex-col gap-6 mt-8 lg:mt-0 lg:flex-row lg:justify-between lg:items-end">
             <div>
               <p className="hero-desc font-sans font-medium text-base text-white/80 max-w-[308px] leading-6 tracking-[0.15px] mb-6 lg:mb-8">
-                {t('description')}
+                {t("description")}
               </p>
 
               <div className="flex gap-3 lg:gap-4 items-start">
@@ -112,10 +114,10 @@ export default function HeroSection() {
               </div>
             </div>
 
-            <div className="hero-arrow hidden lg:block">
+            <div className="hero-arrow hidden lg:block ">
               <Image
                 src="/arrow-hero.svg"
-                alt={t('cta')}
+                alt={t("cta")}
                 width={400}
                 height={324}
                 className="w-[clamp(180px,16vw,280px)] h-auto"
