@@ -6,6 +6,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PROJECTS, type Project } from "@/data/projects";
 import ProjectModal from "@/components/ProjectModal";
+import { useTranslations } from "next-intl";
+import { useHeaderStore } from "@/store/useHeaderStore";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,110 +15,116 @@ const SVG_CX = 747;
 const SVG_CY = 444;
 
 export default function ProjectsSection() {
-  const containerRef    = useRef<HTMLElement>(null);
-  const svgRef          = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
   const projectTitleRef = useRef<HTMLParagraphElement>(null);
+  const t = useTranslations("Projects");
+  const setIsVisible = useHeaderStore((s) => s.setIsVisible);
 
   const [activeProject, setActiveProject] = useState<Project | null>(null);
 
-  useGSAP(() => {
-    const els = Array.from(
-      svgRef.current?.querySelectorAll<SVGGraphicsElement>(".polygon") ?? [],
-    );
-    if (!els.length) return;
-
-    // Click abre modal — funciona em desktop e mobile
-    els.forEach((el) => {
-      const attr = el.getAttribute("data-project");
-      if (attr === null) return;
-      const project = PROJECTS[parseInt(attr)];
-      if (!project) return;
-      el.style.cursor = "pointer";
-      el.addEventListener("click", () => setActiveProject(project));
-    });
-
-    const mm = gsap.matchMedia();
-
-    // Desktop: pin + scrub + hover com título
-    mm.add("(min-width: 1024px)", () => {
-      gsap.set(els, {
-        opacity: 0,
-        x: (_i: number, el: SVGGraphicsElement) => (el.getBBox().x + el.getBBox().width  / 2 - SVG_CX) * 0.5,
-        y: (_i: number, el: SVGGraphicsElement) => (el.getBBox().y + el.getBBox().height / 2 - SVG_CY) * 0.5,
-      });
-      gsap.set(".projects-label", { x: -60, opacity: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          pin: true,
-          start: "top top",
-          end: "+=900",
-          scrub: 1.5,
-          // Descendo de Projects → vai direto para Blog
-          onLeave: () => {
-            const el = document.getElementById("blog-section");
-            if (el) el.scrollIntoView({ behavior: "smooth" });
-          },
-          // Subindo de Projects → vai direto para About
-          onLeaveBack: () => {
-            const el = document.getElementById("about-section");
-            if (el) el.scrollIntoView({ behavior: "smooth" });
-          },
-        },
-      });
-
-      tl.to(els, { x: 0, y: 0, opacity: 1, stagger: 0.12, duration: 1, ease: "power2.out" }, 0);
-      tl.to(".projects-label", { x: 0, opacity: 1, duration: 0.6 }, 0);
+  useGSAP(
+    () => {
+      const els = Array.from(
+        svgRef.current?.querySelectorAll<SVGGraphicsElement>(".polygon") ?? [],
+      );
+      if (!els.length) return;
 
       els.forEach((el) => {
         const attr = el.getAttribute("data-project");
-        const isProject = attr !== null;
+        if (attr === null) return;
+        const project = PROJECTS[parseInt(attr)];
+        if (!project) return;
+        el.style.cursor = "pointer";
+        el.addEventListener("click", () => setActiveProject(project));
+      });
 
-        el.addEventListener("mouseenter", () => {
-          if (isProject && projectTitleRef.current) {
-            const p = PROJECTS[parseInt(attr!)];
-            projectTitleRef.current.textContent = p?.title ?? "";
-            gsap.to(projectTitleRef.current, { opacity: 1, y: 0, duration: 0.2, ease: "power2.out" });
-          }
-          gsap.to(el, {
-            fill: "#ffffff",
-            scale: 1.06,
-            transformOrigin: "center center",
-            duration: 0.2,
-            ease: "power2.out",
-            overwrite: "auto",
-          });
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 1024px)", () => {
+        gsap.set(els, {
+          opacity: 0,
+          x: (_i: number, el: SVGGraphicsElement) =>
+            (el.getBBox().x + el.getBBox().width / 2 - SVG_CX) * 0.5,
+          y: (_i: number, el: SVGGraphicsElement) =>
+            (el.getBBox().y + el.getBBox().height / 2 - SVG_CY) * 0.5,
+        });
+        gsap.set(".projects-label", { x: -60, opacity: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            pin: true,
+            start: "top top",
+            end: "+=900",
+            scrub: 1.5,
+            onLeave: () => {
+              const el = document.getElementById("blog-section");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            },
+            onLeaveBack: () => {
+              const el = document.getElementById("about-section");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            },
+          },
         });
 
-        el.addEventListener("mouseleave", () => {
-          if (isProject && projectTitleRef.current) {
-            gsap.to(projectTitleRef.current, { opacity: 0, y: 4, duration: 0.15 });
-          }
-          gsap.to(el, {
-            fill: "#F3F293",
-            scale: 1,
-            transformOrigin: "center center",
-            duration: 0.35,
-            ease: "power2.inOut",
-            overwrite: "auto",
+        tl.to(els, { x: 0, y: 0, opacity: 1, stagger: 0.12, duration: 1, ease: "power2.out" }, 0);
+        tl.to(".projects-label", { x: 0, opacity: 1, duration: 0.6 }, 0);
+
+        els.forEach((el) => {
+          const attr = el.getAttribute("data-project");
+          const isProject = attr !== null;
+
+          el.addEventListener("mouseenter", () => {
+            if (isProject && projectTitleRef.current) {
+              projectTitleRef.current.textContent = t(`p${parseInt(attr!) + 1}_title`);
+              gsap.to(projectTitleRef.current, {
+                opacity: 1,
+                y: 0,
+                duration: 0.2,
+                ease: "power2.out",
+              });
+            }
+            gsap.to(el, {
+              fill: "#ffffff",
+              scale: 1.06,
+              transformOrigin: "center center",
+              duration: 0.2,
+              ease: "power2.out",
+              overwrite: "auto",
+            });
+          });
+
+          el.addEventListener("mouseleave", () => {
+            if (isProject && projectTitleRef.current) {
+              gsap.to(projectTitleRef.current, { opacity: 0, y: 4, duration: 0.15 });
+            }
+            gsap.to(el, {
+              fill: "#F3F293",
+              scale: 1,
+              transformOrigin: "center center",
+              duration: 0.35,
+              ease: "power2.inOut",
+              overwrite: "auto",
+            });
           });
         });
       });
-    });
 
-    // Mobile: fade-in simples, sem pin
-    mm.add("(max-width: 1023px)", () => {
-      gsap.from(els, {
-        opacity: 0,
-        scale: 0.92,
-        stagger: 0.04,
-        duration: 0.5,
-        ease: "power2.out",
-        scrollTrigger: { trigger: containerRef.current, start: "top 80%" },
+      mm.add("(max-width: 1023px)", () => {
+        gsap.from(els, {
+          opacity: 0,
+          scale: 0.92,
+          stagger: 0.04,
+          duration: 0.5,
+          ease: "power2.out",
+          scrollTrigger: { trigger: containerRef.current, start: "top 80%" },
+        });
       });
-    });
-  }, { scope: containerRef });
+    },
+    { scope: containerRef },
+  );
 
   return (
     <section
@@ -125,17 +133,15 @@ export default function ProjectsSection() {
       className="w-full bg-bg mt-16 lg:mt-32 min-h-[60vw] lg:min-h-svh relative snap-start"
     >
       <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
-      {/* Título do projeto hovered — aparece no canto inferior esquerdo (desktop) */}
       <p
         ref={projectTitleRef}
         className="hidden lg:block absolute bottom-10 left-[55px] font-condensed wdth-condensed font-medium italic text-white/70 text-lg uppercase tracking-[0.2em] opacity-0 translate-y-1 pointer-events-none z-20"
       />
 
       <div className="flex flex-col lg:flex-row lg:items-center max-w-[1728px] mx-auto px-5 md:px-8 lg:pl-[55px] lg:pr-0 gap-4 lg:gap-[14px] py-8 lg:py-0 lg:h-[888px]">
-
         <div className="projects-label shrink-0 flex items-center lg:justify-center w-auto lg:w-[48px] lg:h-[201px]">
           <p className="font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap lg:-rotate-90">
-            PROJETOS
+            {t("title")}
           </p>
         </div>
 
@@ -149,25 +155,96 @@ export default function ProjectsSection() {
             overflow="visible"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* ── Decorativos (pequenos) ─────────────────────────────── */}
-            <path className="polygon" d="M1224.92 744L1168 722.645L1209.11 657L1285 687.845L1224.92 744Z" fill="#F3F293" />
-            <path className="polygon" d="M1163 433.155L1007.25 474L975 225L1085.13 233.64L1163 433.155Z" fill="#F3F293" />
-            <path className="polygon" d="M741.47 271L689 219.025L726.59 145L754 154.45L741.47 271Z" fill="#F3F293" />
-            <path className="polygon" d="M452.293 600L400 568.312L444.488 539L496 563.558L452.293 600Z" fill="#F3F293" />
-            <path className="polygon" d="M366.555 568L316 530.8L338.908 506L350.756 506L410 525.375L366.555 568Z" fill="#F3F293" />
-            <path className="polygon" d="M508 200.089C470.454 205.059 394.89 215 393 215L456.801 153L508 200.089Z" fill="#F3F293" />
-            <path className="polygon" d="M678 156.169L533 168L601.189 0L678 156.169Z" fill="#F3F293" />
+            <path
+              className="polygon"
+              d="M1224.92 744L1168 722.645L1209.11 657L1285 687.845L1224.92 744Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              d="M1163 433.155L1007.25 474L975 225L1085.13 233.64L1163 433.155Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              d="M741.47 271L689 219.025L726.59 145L754 154.45L741.47 271Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              d="M452.293 600L400 568.312L444.488 539L496 563.558L452.293 600Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              d="M366.555 568L316 530.8L338.908 506L350.756 506L410 525.375L366.555 568Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              d="M508 200.089C470.454 205.059 394.89 215 393 215L456.801 153L508 200.089Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              d="M678 156.169L533 168L601.189 0L678 156.169Z"
+              fill="#F3F293"
+            />
 
-            {/* ── Projetos (polígonos grandes) — data-project mapeia para PROJECTS[] ── */}
-            <path className="polygon" data-project="0" d="M1113 256.969L1218.34 446L1407 425.522L1384.2 197.109L1180.6 64L1113 256.969Z" fill="#F3F293" />
-            <path className="polygon" data-project="1" d="M879.308 533L715 533L845.503 3L920.975 31.3507L965 398.334L879.308 533Z" fill="#F3F293" />
-            <path className="polygon" data-project="2" d="M689.011 846L590.362 728.411L573 557.946L803.443 554L865 761.557L689.011 846Z" fill="#F3F293" />
-            <path className="polygon" data-project="3" d="M573 773.873L300 888L526.582 559L573 773.873Z" fill="#F3F293" />
-            <path className="polygon" data-project="4" d="M286.323 862L20 763.524L20 550.817L277.656 539L425 626.446L286.323 862Z" fill="#F3F293" />
-            <path className="polygon" data-project="5" d="M303.347 510.918L6.287 518L0 363.77L289.987 230L356 408.623L356 433.016L303.347 510.918Z" fill="#F3F293" />
-            <path className="polygon" data-project="6" d="M664.209 524L390.508 496.456L370 263.514L647.645 210L721 332.767L664.209 524Z" fill="#F3F293" />
-            <path className="polygon" data-project="7" d="M1012.72 805L890.717 744.5L849 557.5L1107.96 475L1130 706L1012.72 805Z" fill="#F3F293" />
-            <path className="polygon" data-project="8" d="M1313.37 677C1268.08 663.077 1176.4 635.23 1172 635.23L1196.35 488.643L1424.1 465L1494 604.494L1494 623.409L1435.88 677L1313.37 677Z" fill="#F3F293" />
+            <path
+              className="polygon"
+              data-project="0"
+              d="M1113 256.969L1218.34 446L1407 425.522L1384.2 197.109L1180.6 64L1113 256.969Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              data-project="1"
+              d="M879.308 533L715 533L845.503 3L920.975 31.3507L965 398.334L879.308 533Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              data-project="2"
+              d="M689.011 846L590.362 728.411L573 557.946L803.443 554L865 761.557L689.011 846Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              data-project="3"
+              d="M573 773.873L300 888L526.582 559L573 773.873Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              data-project="4"
+              d="M286.323 862L20 763.524L20 550.817L277.656 539L425 626.446L286.323 862Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              data-project="5"
+              d="M303.347 510.918L6.287 518L0 363.77L289.987 230L356 408.623L356 433.016L303.347 510.918Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              data-project="6"
+              d="M664.209 524L390.508 496.456L370 263.514L647.645 210L721 332.767L664.209 524Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              data-project="7"
+              d="M1012.72 805L890.717 744.5L849 557.5L1107.96 475L1130 706L1012.72 805Z"
+              fill="#F3F293"
+            />
+            <path
+              className="polygon"
+              data-project="8"
+              d="M1313.37 677C1268.08 663.077 1176.4 635.23 1172 635.23L1196.35 488.643L1424.1 465L1494 604.494L1494 623.409L1435.88 677L1313.37 677Z"
+              fill="#F3F293"
+            />
           </svg>
         </div>
       </div>

@@ -1,0 +1,60 @@
+{
+  "Hero": {
+    "title": "GUSTAVO",
+    "subtitle": "Desenvolvedor FULLSTACK",
+    "description": "A imaginação é mais importante que o conhecimento — construo experiências digitais com foco em performance e design.",
+    "cta": "Ver projetos"
+  },
+  "About": {
+    "title": "SOBRE",
+    "description": "Desenvolvedor fullstack com foco em criar aplicações modernas, escaláveis e bem projetadas. Trabalho com React, Next.js, Node.js e infraestrutura em nuvem."
+  },
+  "Nav": {
+    "home": "Inicio",
+    "about": "Sobre Mim",
+    "projects": "Projetos",
+    "blog": "Artigos"
+  },
+  "Footer": {
+    "description": "Desenvolvedor fullstack apaixonado por criar experiências digitais que unem design e tecnologia de alto desempenho.",
+    "navTitle": "NAVEGAÇÃO",
+    "backToTop": "Voltar ao topo",
+    "copyright": "© 2026 Gustavo da Silva Rodrigues.",
+    "rights": "All Rights Reserved."
+  },
+  "Projects": {
+    "title": "PROJETOS",
+    "description": "Uma seleção dos meus trabalhos favoritos.",
+    "p1_title": "Projeto 1",
+    "p1_desc": "Descrição do projeto.",
+    "p2_title": "Projeto 2",
+    "p2_desc": "Descrição do projeto.",
+    "p3_title": "Projeto 3",
+    "p3_desc": "Descrição do projeto.",
+    "p4_title": "Projeto 4",
+    "p4_desc": "Descrição do projeto.",
+    "p5_title": "Projeto 5",
+    "p5_desc": "Descrição do projeto.",
+    "p6_title": "Projeto 6",
+    "p6_desc": "Descrição do projeto.",
+    "p7_title": "Projeto 7",
+    "p7_desc": "Descrição do projeto.",
+    "p8_title": "Projeto 8",
+    "p8_desc": "Descrição do projeto.",
+    "p9_title": "Projeto 9",
+    "p9_desc": "Descrição do projeto.",
+    "viewProject": "Ver Projeto"
+  },
+  "Blog": {
+    "title": "Blog",
+    "readMore": "Ler artigo",
+    "art1_title": "Next.js Otimização",
+    "art1_excerpt": "Técnicas avançadas para otimizar aplicações Next.js em produção — bundle splitting, image optimization e streaming SSR.",
+    "art2_title": "Arquitetura Limpa com Node.js",
+    "art2_excerpt": "Como estruturar APIs Node.js escaláveis aplicando os princípios de Clean Architecture e Domain-Driven Design.",
+    "art3_title": "Docker e Kubernetes na Prática",
+    "art3_excerpt": "Containerização e orquestração: um guia prático para fazer deploy de aplicações fullstack em produção.",
+    "art4_title": "React Server Components",
+    "art4_excerpt": "Entendendo o modelo de renderização híbrida do React 19 e como RSCs transformam a forma de construir UIs."
+  }
+}

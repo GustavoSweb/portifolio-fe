@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { Bubblegum_Sans, Roboto, Roboto_Condensed } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/Header";
+import "../globals.css";
 import Footer from "@/components/Footer";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, setRequestLocale } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
+import Header from "@/components/Header";
 
 const bubblegum = Bubblegum_Sans({
   variable: "--font-bubblegum",
@@ -29,18 +33,37 @@ export const metadata: Metadata = {
     "Portfolio de Gustavo Rodrigues, desenvolvedor fullstack especializado em React, Next.js e Node.js.",
 };
 
-export default function RootLayout({
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
+
+  setRequestLocale(locale);
+  const messages = await getMessages();
+
   return (
     <html
-      lang="pt-BR"
+      lang={locale}
       className={`${bubblegum.variable} ${roboto.variable} ${robotoCondensed.variable} h-full`}
     >
       <body className="min-h-full flex flex-col">
-        <Header />
-        {children}
-        <Footer />
+        <NextIntlClientProvider messages={messages}>
+          <Header />
+          {children}
+          <Footer />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

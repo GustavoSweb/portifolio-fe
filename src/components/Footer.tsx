@@ -5,13 +5,21 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const NAV_LINKS = ["Inicio", "Sobre Mim", "Projetos", "Artigos"];
-
 export default function Footer() {
   const containerRef = useRef<HTMLElement>(null);
+  const t = useTranslations("Footer");
+  const tNav = useTranslations("Nav");
+
+  const NAV_LINKS = [
+    { label: tNav("home"), href: "#hero-section" },
+    { label: tNav("about"), href: "#about-section" },
+    { label: tNav("projects"), href: "#projects-section" },
+    { label: tNav("blog"), href: "#blog-section" },
+  ];
 
   useGSAP(
     () => {
@@ -45,8 +53,7 @@ export default function Footer() {
               GUSTAVO
             </p>
             <p className="font-sans font-medium text-base text-white/80 leading-6 tracking-[0.15px] max-w-[244px] mb-8">
-              Desenvolvedor fullstack apaixonado por criar experiências digitais que unem design e
-              tecnologia de alto desempenho.
+              {t("description")}
             </p>
             <div className="flex gap-3">
               <a
@@ -72,16 +79,16 @@ export default function Footer() {
 
           <div className="footer-col">
             <p className="font-display text-2xl text-white tracking-[-0.25px] uppercase whitespace-nowrap mb-6 lg:mb-8">
-              NAVEGAÇÃO
+              {t("navTitle")}
             </p>
             <nav className="flex flex-col gap-4">
               {NAV_LINKS.map((link) => (
                 <a
-                  key={link}
-                  href="#"
+                  key={link.label}
+                  href={link.href}
                   className="font-sans text-base text-white/70 tracking-[-0.25px] capitalize hover:text-white transition-colors"
                 >
-                  {link}
+                  {link.label}
                 </a>
               ))}
             </nav>
@@ -93,19 +100,19 @@ export default function Footer() {
             <button
               onClick={scrollToTop}
               className="flex items-center justify-center rounded-lg overflow-hidden hover:opacity-90 transition-opacity w-[67px] h-[67px] bg-transparent"
-              aria-label="Voltar ao topo"
+              aria-label={t("backToTop")}
             >
-              <Image src="/footer-arrow-up.svg" alt="Voltar ao topo" width={67} height={67} />
+              <Image src="/footer-arrow-up.svg" alt={t("backToTop")} width={67} height={67} />
             </button>
           </div>
         </div>
 
         <div className="border-t border-white/12 mt-10 lg:mt-20 py-6 flex flex-col gap-1 lg:flex-row lg:justify-between lg:items-center">
           <p className="font-sans text-sm lg:text-base text-white/40 tracking-[-0.25px] uppercase">
-            © 2026 Gustavo da Silva Rodrigues.
+            {t("copyright")}
           </p>
           <p className="font-sans text-sm lg:text-base text-white/40 tracking-[-0.25px]">
-            All Rights Reserved.
+            {t("rights")}
           </p>
         </div>
       </div>

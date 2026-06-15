@@ -2,25 +2,40 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-
-const navLinks = [
-  { label: "Inicio", href: "#hero-section" },
-  { label: "Sobre Mim", href: "#about-section" },
-  { label: "Projetos", href: "#projects-section" },
-  { label: "Artigos", href: "#blog-section" },
-];
-
-const languages = [
-  { code: "PT", label: "Português" },
-  { code: "EN", label: "English" },
-];
+import { useTranslations, useLocale } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/routing";
+import { useHeaderStore } from "@/store/useHeaderStore";
 
 export default function Header() {
-  const [lang, setLang] = useState("PT");
+  const t = useTranslations("Nav");
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isVisible = useHeaderStore((s) => s.isVisible);
+
+  const navLinks = [
+    { label: t("home"), href: "#hero-section" },
+    { label: t("about"), href: "#about-section" },
+    { label: t("projects"), href: "#projects-section" },
+    { label: t("blog"), href: "#blog-section" },
+  ];
+
+  const languages = [
+    { code: "pt-BR", label: "PT" },
+    { code: "en", label: "EN" },
+  ];
+
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
+
+  const currentLang = languages.find((l) => l.code === locale)?.label || "PT";
+
+  const onSelectLocale = (nextLocale: string) => {
+    router.replace(pathname, { locale: nextLocale });
+    setOpen(false);
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -54,12 +69,12 @@ export default function Header() {
 
   return (
     <div
-      className={`sticky top-0 z-40 flex justify-center transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}
+      className={`sticky top-0 z-40 flex justify-center transition-transform duration-300 ${hidden || !isVisible ? "-translate-y-full" : "translate-y-0"}`}
     >
       <header
         className={`max-w-[1728px] w-full bg-bg flex items-center justify-between px-4 lg:px-16 py-4 lg:py-6`}
       >
-        <a href="#hero-section" aria-label="Início" className="shrink-0">
+        <a href="#hero-section" aria-label={t("home")} className="shrink-0">
           <svg
             width="33"
             height="22"
@@ -76,7 +91,7 @@ export default function Header() {
         </a>
 
         <div className="hidden md:flex items-center gap-8 lg:gap-32">
-          <nav aria-label="Navegação principal">
+          <nav aria-label={t("home")}>
             <ul className="flex items-center gap-8 lg:gap-16">
               {navLinks.map(({ label, href }) => (
                 <li key={href}>
@@ -100,7 +115,7 @@ export default function Header() {
                 className={`text-white group-hover:text-orange transition-transform duration-200 ${open ? "rotate-180" : ""}`}
                 strokeWidth={1.5}
               />
-              <span className={baseTextClass}>{lang}</span>
+              <span className={baseTextClass}>{currentLang}</span>
             </button>
 
             {open && (
@@ -110,15 +125,12 @@ export default function Header() {
                 className="absolute right-0 top-full mt-2 bg-bg border border-white/10 min-w-[80px] shadow-lg"
               >
                 {languages.map(({ code, label }) => (
-                  <li key={code} role="option" aria-selected={lang === code}>
+                  <li key={code} role="option" aria-selected={locale === code}>
                     <button
-                      onClick={() => {
-                        setLang(code);
-                        setOpen(false);
-                      }}
-                      className={`w-full px-4 py-2 text-left font-condensed italic wdth-condensed text-base text-white tracking-[-0.25px] hover:text-orange transition-colors ${lang === code ? "text-orange" : ""}`}
+                      onClick={() => onSelectLocale(code)}
+                      className={`w-full px-4 py-2 text-left font-condensed italic wdth-condensed text-base text-white tracking-[-0.25px] hover:text-orange transition-colors ${locale === code ? "text-orange" : ""}`}
                     >
-                      {code}
+                      {label}
                     </button>
                   </li>
                 ))}

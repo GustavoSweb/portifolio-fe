@@ -5,39 +5,38 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { useHeaderStore } from "@/store/useHeaderStore";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ARTICLES = [
-  {
-    title: "Next.js Otimização",
-    excerpt:
-      "Técnicas avançadas para otimizar aplicações Next.js em produção — bundle splitting, image optimization e streaming SSR.",
-  },
-  {
-    title: "Arquitetura Limpa com Node.js",
-    excerpt:
-      "Como estruturar APIs Node.js escaláveis aplicando os princípios de Clean Architecture e Domain-Driven Design.",
-  },
-  {
-    title: "Docker e Kubernetes na Prática",
-    excerpt:
-      "Containerização e orquestração: um guia prático para fazer deploy de aplicações fullstack em produção.",
-  },
-  {
-    title: "React Server Components",
-    excerpt:
-      "Entendendo o modelo de renderização híbrida do React 19 e como RSCs transformam a forma de construir UIs.",
-  },
-];
-
 export default function BlogSection() {
   const containerRef = useRef<HTMLElement>(null);
+  const t = useTranslations("Blog");
+  const setIsVisible = useHeaderStore((s) => s.setIsVisible);
+  const ARTICLES = [
+    {
+      title: t("art1_title"),
+      excerpt: t("art1_excerpt"),
+    },
+    {
+      title: t("art2_title"),
+      excerpt: t("art2_excerpt"),
+    },
+    {
+      title: t("art3_title"),
+      excerpt: t("art3_excerpt"),
+    },
+    {
+      title: t("art4_title"),
+      excerpt: t("art4_excerpt"),
+    },
+  ];
+
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
-      // Pin + navegação direta entre Projects ↔ Blog (desktop)
       mm.add("(min-width: 1024px)", () => {
         ScrollTrigger.create({
           trigger: containerRef.current,
@@ -45,8 +44,11 @@ export default function BlogSection() {
           start: "top top",
           end: "+=600",
           pinSpacing: true,
-          // Subindo de Blog → vai direto para Projects
+          onEnter: () => setIsVisible(false),
+          onEnterBack: () => setIsVisible(false),
+          onLeave: () => setIsVisible(true),
           onLeaveBack: () => {
+            setIsVisible(true);
             const el = document.getElementById("projects-section");
             if (el) el.scrollIntoView({ behavior: "smooth" });
           },
@@ -81,7 +83,7 @@ export default function BlogSection() {
     >
       <div className="content-wrap pb-12 lg:pb-20">
         <p className="blog-title font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap pb-6 lg:pb-8 pt-6">
-          Blog
+          {t("title")}
         </p>
 
         <div className="blog-grid grid grid-cols-1 lg:grid-cols-2 gap-x-8">
@@ -99,7 +101,7 @@ export default function BlogSection() {
                 <div className="shrink-0 w-[56px] h-[56px] lg:w-[98px] lg:h-[98px] transition-transform duration-300 ease-out group-hover:-rotate-45">
                   <Image
                     src="/arrow-right.svg"
-                    alt="Ler artigo"
+                    alt={t("readMore")}
                     width={98}
                     height={98}
                     className="w-full h-full group-hover:scale-110 transition-transform duration-200"

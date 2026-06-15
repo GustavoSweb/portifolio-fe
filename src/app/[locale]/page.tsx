@@ -4,8 +4,16 @@ import AboutSection from "@/components/sections/AboutSection";
 import ProjectsSection from "@/components/sections/ProjectsSection";
 import BlogSection from "@/components/sections/BlogSection";
 import GallerySection from "@/components/sections/GallerySection";
+import {setRequestLocale} from 'next-intl/server';
 
-export default function Home() {
+export default async function Home({
+  params
+}: {
+  params: Promise<{locale: string}>;
+}) {
+  const {locale} = await params;
+  setRequestLocale(locale);
+
   return (
     <>
       <CustomCursor />

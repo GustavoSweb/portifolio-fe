@@ -1,0 +1,60 @@
+{
+  "Hero": {
+    "title": "GUSTAVO",
+    "subtitle": "FULLSTACK Developer",
+    "description": "Imagination is more important than knowledge — I build digital experiences with a focus on performance and design.",
+    "cta": "See projects"
+  },
+  "About": {
+    "title": "ABOUT",
+    "description": "Fullstack developer focused on creating modern, scalable, and well-designed applications. I work with React, Next.js, Node.js, and cloud infrastructure."
+  },
+  "Nav": {
+    "home": "Home",
+    "about": "About Me",
+    "projects": "Projects",
+    "blog": "Articles"
+  },
+  "Footer": {
+    "description": "Fullstack developer passionate about creating digital experiences that combine design and high-performance technology.",
+    "navTitle": "NAVIGATION",
+    "backToTop": "Back to top",
+    "copyright": "© 2026 Gustavo da Silva Rodrigues.",
+    "rights": "All Rights Reserved."
+  },
+  "Projects": {
+    "title": "PROJECTS",
+    "description": "A selection of my favorite works.",
+    "p1_title": "Project 1",
+    "p1_desc": "Project description.",
+    "p2_title": "Project 2",
+    "p2_desc": "Project description.",
+    "p3_title": "Project 3",
+    "p3_desc": "Project description.",
+    "p4_title": "Project 4",
+    "p4_desc": "Project description.",
+    "p5_title": "Project 5",
+    "p5_desc": "Project description.",
+    "p6_title": "Project 6",
+    "p6_desc": "Project description.",
+    "p7_title": "Project 7",
+    "p7_desc": "Project description.",
+    "p8_title": "Project 8",
+    "p8_desc": "Project description.",
+    "p9_title": "Project 9",
+    "p9_desc": "Project description.",
+    "viewProject": "View Project"
+  },
+  "Blog": {
+    "title": "Blog",
+    "readMore": "Read article",
+    "art1_title": "Next.js Optimization",
+    "art1_excerpt": "Advanced techniques for optimizing Next.js applications in production — bundle splitting, image optimization, and streaming SSR.",
+    "art2_title": "Clean Architecture with Node.js",
+    "art2_excerpt": "How to structure scalable Node.js APIs applying the principles of Clean Architecture and Domain-Driven Design.",
+    "art3_title": "Docker and Kubernetes in Practice",
+    "art3_excerpt": "Containerization and orchestration: a practical guide to deploying fullstack applications in production.",
+    "art4_title": "React Server Components",
+    "art4_excerpt": "Understanding the hybrid rendering model of React 19 and how RSCs transform the way we build UIs."
+  }
+}

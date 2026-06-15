@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,6 +29,7 @@ const SKILL_ICONS: { src: string; alt: string; overlay?: boolean; inset?: string
 
 export default function AboutSection() {
   const containerRef = useRef<HTMLElement>(null);
+  const t = useTranslations("About");
 
   useGSAP(
     () => {
@@ -60,7 +62,7 @@ export default function AboutSection() {
   );
 
   return (
-    <section ref={containerRef} id="about-section" className="w-full relative bg-bg snap-start">
+    <section ref={containerRef} id="about-section" className="w-full relative bg-bg ">
       <div className="content-wrap pb-10 lg:pb-[160px]">
         <div className="relative grid grid-cols-1 lg:grid-cols-[800fr_800fr] lg:min-h-[504px]">
           <div className="relative flex flex-col justify-end p-4 bg-bg border border-teal min-h-[240px] lg:min-h-0">
@@ -81,11 +83,16 @@ export default function AboutSection() {
           <div className="relative flex flex-col overflow-hidden bg-orange p-8 lg:p-16">
             <div className="flex">
               <h2 className="font-display text-[clamp(3rem,7.4vw,8rem)] text-bg leading-none tracking-[-0.25px] whitespace-nowrap">
-                {"SOBRE".split("").map((l, i) => (
-                  <span key={i} className="inline-block overflow-hidden leading-none align-bottom">
-                    <span className="about-title-letter inline-block">{l}</span>
-                  </span>
-                ))}
+                {t("title")
+                  .split("")
+                  .map((l, i) => (
+                    <span
+                      key={i}
+                      className="inline-block overflow-hidden leading-none align-bottom"
+                    >
+                      <span className="about-title-letter inline-block">{l}</span>
+                    </span>
+                  ))}
               </h2>
 
               <div className="overflow-hidden mt-8">
@@ -111,8 +118,7 @@ export default function AboutSection() {
             <div className="flex-1 min-h-8" />
 
             <p className="about-desc self-end text-right font-sans font-semibold text-base text-bg max-w-[308px] tracking-[0.15px] leading-6">
-              Desenvolvedor fullstack com foco em criar aplicações modernas, escaláveis e bem
-              projetadas. Trabalho com React, Next.js, Node.js e infraestrutura em nuvem.
+              {t("description")}
             </p>
           </div>
 
