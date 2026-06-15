@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
 import { type Project } from "@/data/projects";
+import { useHeaderStore } from "@/store/useHeaderStore";
 
 const ICON_MAP: Record<string, string> = {
   JavaScript: "/skill-js.svg",
@@ -37,6 +38,7 @@ export default function ProjectModal({ project, onClose }: Props) {
   const contentRef = useRef<HTMLDivElement>(null);
   const isExpandedRef = useRef(false);
   const isAnimatingRef = useRef(false);
+  const setIsVisible = useHeaderStore((s) => s.setIsVisible);
 
   const [displayed, setDisplayed] = useState<Project | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -71,6 +73,7 @@ export default function ProjectModal({ project, onClose }: Props) {
 
     if (project) {
       setDisplayed(project);
+      setIsVisible(false);
       setExpandedState(false);
       isAnimatingRef.current = false;
       document.body.style.overflow = "hidden";
@@ -317,7 +320,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-bg text-white font-sans font-semibold text-sm uppercase tracking-wider hover:opacity-90 transition-opacity"
                   >
-                    {t("viewProject", { defaultMessage: "Ver Projeto" })}
+                    Ver Projeto
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                       <path
                         d="M2 12L12 2M12 2H5M12 2V9"

@@ -29,8 +29,12 @@ export default function HeroSection() {
   );
 
   return (
-    <section ref={containerRef} className="w-full bg-bg relative overflow-hidden min-h-[90svh]">
-      <div className="content-wrap py-10 lg:py-16 !pt-0 min-h-[97svh] flex flex-col lg:grid lg:grid-cols-[880fr_784fr] gap-6 lg:gap-0 relative z-10">
+    <section
+      ref={containerRef}
+      id="hero-section"
+      className="w-full bg-bg relative overflow-hidden min-h-[90svh]"
+    >
+      <div className="content-wrap py-10 lg:py-16 !pt-0 min-h-[95svh] flex flex-col lg:grid lg:grid-cols-[880fr_784fr] gap-6 lg:gap-0 relative z-10">
         <div className="hero-photo relative rounded-2xl lg:rounded-3xl overflow-hidden h-[260px] order-1 lg:order-2 lg:h-auto">
           <Image
             src="/photo.jpg"
