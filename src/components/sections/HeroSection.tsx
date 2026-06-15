@@ -37,11 +37,11 @@ export default function HeroSection() {
       <div className="content-wrap py-10 lg:py-16 !pt-0 min-h-[95svh] flex flex-col lg:grid lg:grid-cols-[880fr_784fr] gap-6 lg:gap-0 relative z-10">
         <div className="hero-photo relative rounded-2xl lg:rounded-3xl overflow-hidden h-[260px] order-1 lg:order-2 lg:h-auto">
           <Image
-            src="/photo.jpg"
+            src="/photo.png"
             alt="Gustavo Rodrigues"
             fill
             priority
-            className="object-cover object-center"
+            className="object-cover object-[40%_40%]"
             sizes="(max-width: 1023px) 100vw, (max-width: 1728px) 45vw, 784px"
           />
         </div>
