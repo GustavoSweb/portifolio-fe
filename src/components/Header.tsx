@@ -5,23 +5,31 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/routing";
+import { useHeaderStore } from "@/store/useHeaderStore";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const navLinks = [
-  { label: "Inicio", href: "#hero-section", num: "01" },
-  { label: "Sobre Mim", href: "#about-section", num: "02" },
-  { label: "Projetos", href: "#projects-section", num: "03" },
-  { label: "Artigos", href: "#blog-section", num: "04" },
-];
-
-const languages = [
-  { code: "PT", label: "Português" },
-  { code: "EN", label: "English" },
-];
-
 export default function Header() {
-  const [lang, setLang] = useState("PT");
+  const t = useTranslations("Nav");
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
+  const isVisible = useHeaderStore((s) => s.isVisible);
+
+  const navLinks = [
+    { label: t("home"), href: "#hero-section", num: "01" },
+    { label: t("about"), href: "#about-section", num: "02" },
+    { label: t("projects"), href: "#projects-section", num: "03" },
+    { label: t("blog"), href: "#blog-section", num: "04" },
+  ];
+
+  const languages = [
+    { code: "pt-BR", label: "PT" },
+    { code: "en", label: "EN" },
+  ];
+
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,6 +43,14 @@ export default function Header() {
   const lastScrollY = useRef(0);
   const isAnimating = useRef(false);
 
+  const currentLangLabel = languages.find((l) => l.code === locale)?.label || "PT";
+
+  const onSelectLocale = (nextLocale: string) => {
+    router.replace(pathname, { locale: nextLocale });
+    setOpen(false);
+    if (menuOpen) closeMenu();
+  };
+
   useEffect(() => {
     if (menuRef.current) {
       gsap.set(menuRef.current, { y: "-100%", pointerEvents: "none" });
@@ -46,8 +62,10 @@ export default function Header() {
       if (menuOpen) return;
       const y = window.scrollY;
       if (y <= 0) setHidden(false);
-      else if (y > lastScrollY.current) { setHidden(true); setOpen(false); }
-      else setHidden(false);
+      else if (y > lastScrollY.current) {
+        setHidden(true);
+        setOpen(false);
+      } else setHidden(false);
       lastScrollY.current = y;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -70,28 +88,31 @@ export default function Header() {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuOpen]);
 
-  useGSAP(() => {
-    const hero = document.getElementById("hero-section");
-    if (!hero || !gustavoRef.current) return;
-    gsap.fromTo(
-      gustavoRef.current,
-      { opacity: 0, x: -20 },
-      {
-        opacity: 1,
-        x: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: hero,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.6,
+  useGSAP(
+    () => {
+      const hero = document.getElementById("hero-section");
+      if (!hero || !gustavoRef.current) return;
+      gsap.fromTo(
+        gustavoRef.current,
+        { opacity: 0, x: -20 },
+        {
+          opacity: 1,
+          x: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: 0.6,
+          },
         },
-      },
-    );
-  }, { dependencies: [] });
+      );
+    },
+    { dependencies: [] },
+  );
 
   const openMenu = () => {
     if (isAnimating.current) return;
@@ -109,15 +130,19 @@ export default function Header() {
       duration: 0.7,
       ease: "power4.inOut",
       pointerEvents: "auto",
-      onComplete: () => { isAnimating.current = false; },
+      onComplete: () => {
+        isAnimating.current = false;
+      },
     });
 
-    gsap.fromTo(".mobile-nav-item",
+    gsap.fromTo(
+      ".mobile-nav-item",
       { y: 80, opacity: 0 },
       { y: 0, opacity: 1, stagger: 0.07, duration: 0.6, ease: "power3.out", delay: 0.3 },
     );
 
-    gsap.fromTo(".mobile-menu-foot",
+    gsap.fromTo(
+      ".mobile-menu-foot",
       { y: 28, opacity: 0 },
       { y: 0, opacity: 1, duration: 0.45, ease: "power2.out", delay: 0.65 },
     );
@@ -154,95 +179,100 @@ export default function Header() {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 bg-bg flex items-center justify-between px-4 lg:px-16 py-5 lg:py-8 transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}
+        className={`sticky top-0 z-40 bg-bg px-4 lg:px-16 py-5 lg:py-8 transition-transform duration-300 ${hidden || !isVisible ? "-translate-y-full" : "translate-y-0"}`}
       >
-        <div className="flex items-center gap-3 lg:gap-5">
-          <a href="#hero-section" aria-label="Início" className="shrink-0">
-            <svg
-              width="33"
-              height="22"
-              viewBox="0 0 33 22"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M8.48704 2.54565C2.78214 1.6051 0 4.64149 0 9.65092C0 18.4941 8.03507 20.4768 11.1989 21.2033C16.4217 22.4027 25.9664 22.734 30.483 18.6475C31.387 17.8296 36.3587 11.7978 29.1773 6.07276C21.996 0.347706 29.1773 -4.50841 21.5942 7.04396C14.0111 18.5963 15.6182 3.72133 8.48704 2.54565Z"
-                fill="#F96440"
-              />
-            </svg>
-          </a>
-
-          <span
-            ref={gustavoRef}
-            aria-hidden="true"
-            className="font-display text-xl lg:text-[1.75rem] text-white uppercase leading-none tracking-tight opacity-0"
-          >
-            GUSTAVO
-          </span>
-        </div>
-
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8 lg:gap-32">
-          <nav aria-label="Navegação principal">
-            <ul className="flex items-center gap-8 lg:gap-16">
-              {navLinks.map(({ label, href }) => (
-                <li key={href}>
-                  <a href={href} className={`${baseTextClass} hover:text-orange transition-colors`}>
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div ref={dropdownRef} className="relative">
-            <button
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-              aria-haspopup="listbox"
-              className="flex items-center gap-0.5 hover:text-orange transition-colors group"
-            >
-              <ChevronDown
-                size={24}
-                className={`text-white group-hover:text-orange transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-                strokeWidth={1.5}
-              />
-              <span className={baseTextClass}>{lang}</span>
-            </button>
-
-            {open && (
-              <ul
-                role="listbox"
-                aria-label="Idioma"
-                className="absolute right-0 top-full mt-2 bg-bg border border-white/10 min-w-[80px] shadow-lg"
+        <div className="w-full max-w-[1728px] mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3 lg:gap-5">
+            <a href="#hero-section" aria-label="Início" className="shrink-0">
+              <svg
+                width="33"
+                height="22"
+                viewBox="0 0 33 22"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
               >
-                {languages.map(({ code, label }) => (
-                  <li key={code} role="option" aria-selected={lang === code}>
-                    <button
-                      onClick={() => { setLang(code); setOpen(false); }}
-                      className={`w-full px-4 py-2 text-left font-condensed italic wdth-condensed text-base text-white tracking-[-0.25px] hover:text-orange transition-colors ${lang === code ? "text-orange" : ""}`}
+                <path
+                  d="M8.48704 2.54565C2.78214 1.6051 0 4.64149 0 9.65092C0 18.4941 8.03507 20.4768 11.1989 21.2033C16.4217 22.4027 25.9664 22.734 30.483 18.6475C31.387 17.8296 36.3587 11.7978 29.1773 6.07276C21.996 0.347706 29.1773 -4.50841 21.5942 7.04396C14.0111 18.5963 15.6182 3.72133 8.48704 2.54565Z"
+                  fill="#F96440"
+                />
+              </svg>
+            </a>
+
+            <span
+              ref={gustavoRef}
+              aria-hidden="true"
+              className="font-display text-xl lg:text-[1.75rem] text-white uppercase leading-none tracking-tight opacity-0"
+            >
+              GUSTAVO
+            </span>
+          </div>
+
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-8 lg:gap-32">
+            <nav aria-label="Navegação principal">
+              <ul className="flex items-center gap-8 lg:gap-16">
+                {navLinks.map(({ label, href }) => (
+                  <li key={href}>
+                    <a
+                      href={href}
+                      className={`${baseTextClass} hover:text-orange transition-colors`}
                     >
-                      {code}
-                    </button>
+                      {label}
+                    </a>
                   </li>
                 ))}
               </ul>
-            )}
-          </div>
-        </div>
+            </nav>
 
-        {/* Hamburger button */}
-        <button
-          onClick={menuOpen ? closeMenu : openMenu}
-          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
-          aria-expanded={menuOpen}
-          className="md:hidden flex flex-col gap-[6px] p-2 -mr-2"
-        >
-          <span ref={line1} className="block w-6 h-0.5 bg-white origin-center" />
-          <span ref={line2} className="block w-6 h-0.5 bg-white" />
-          <span ref={line3} className="block w-4 h-0.5 bg-white origin-center" />
-        </button>
+            <div ref={dropdownRef} className="relative">
+              <button
+                onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-haspopup="listbox"
+                className="flex items-center gap-0.5 hover:text-orange transition-colors group"
+              >
+                <ChevronDown
+                  size={24}
+                  className={`text-white group-hover:text-orange transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                  strokeWidth={1.5}
+                />
+                <span className={baseTextClass}>{currentLangLabel}</span>
+              </button>
+
+              {open && (
+                <ul
+                  role="listbox"
+                  aria-label="Idioma"
+                  className="absolute right-0 top-full mt-2 bg-bg border border-white/10 min-w-[80px] shadow-lg"
+                >
+                  {languages.map(({ code, label }) => (
+                    <li key={code} role="option" aria-selected={locale === code}>
+                      <button
+                        onClick={() => onSelectLocale(code)}
+                        className={`w-full px-4 py-2 text-left font-condensed italic wdth-condensed text-base text-white tracking-[-0.25px] hover:text-orange transition-colors ${locale === code ? "text-orange" : ""}`}
+                      >
+                        {label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          {/* Hamburger button */}
+          <button
+            onClick={menuOpen ? closeMenu : openMenu}
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={menuOpen}
+            className="md:hidden flex flex-col gap-[6px] p-2 -mr-2"
+          >
+            <span ref={line1} className="block w-6 h-0.5 bg-white origin-center" />
+            <span ref={line2} className="block w-6 h-0.5 bg-white" />
+            <span ref={line3} className="block w-4 h-0.5 bg-white origin-center" />
+          </button>
+        </div>
       </header>
 
       {/* Mobile full-screen menu — z-30 so header sits on top */}
@@ -259,15 +289,8 @@ export default function Header() {
         <nav className="flex-1 flex flex-col justify-center px-6" aria-label="Navegação mobile">
           <ul>
             {navLinks.map(({ label, href, num }) => (
-              <li
-                key={href}
-                className="mobile-nav-item border-t border-bg/20 first:border-t-0"
-              >
-                <a
-                  href={href}
-                  onClick={closeMenu}
-                  className="flex items-baseline gap-3 py-4 group"
-                >
+              <li key={href} className="mobile-nav-item border-t border-bg/20 first:border-t-0">
+                <a href={href} onClick={closeMenu} className="flex items-baseline gap-3 py-4 group">
                   <span className="font-condensed italic wdth-condensed text-xs text-bg/40 tracking-widest shrink-0 group-hover:text-bg/70 transition-colors">
                     {num}
                   </span>
@@ -287,15 +310,15 @@ export default function Header() {
               Idioma
             </p>
             <div className="flex gap-4">
-              {languages.map(({ code }) => (
+              {languages.map(({ code, label }) => (
                 <button
                   key={code}
-                  onClick={() => setLang(code)}
+                  onClick={() => onSelectLocale(code)}
                   className={`font-condensed italic wdth-condensed text-xl text-bg tracking-[-0.25px] transition-opacity ${
-                    lang === code ? "opacity-100 underline underline-offset-4" : "opacity-35"
+                    locale === code ? "opacity-100 underline underline-offset-4" : "opacity-35"
                   }`}
                 >
-                  {code}
+                  {label}
                 </button>
               ))}
             </div>

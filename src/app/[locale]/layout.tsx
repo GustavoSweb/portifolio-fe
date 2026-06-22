@@ -7,6 +7,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 
 const bubblegum = Bubblegum_Sans({
   variable: "--font-bubblegum",
@@ -60,9 +61,11 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={messages}>
-          <Header />
-          {children}
-          <Footer />
+          <SmoothScrollProvider>
+            <Header />
+            {children}
+            <Footer />
+          </SmoothScrollProvider>
         </NextIntlClientProvider>
       </body>
     </html>

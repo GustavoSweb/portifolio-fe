@@ -14,6 +14,20 @@ gsap.registerPlugin(ScrollTrigger);
 const SVG_CX = 747;
 const SVG_CY = 444;
 
+// Bounding boxes for each project polygon (in SVG viewBox coordinates 0 0 1494 888)
+// Used to correctly position the cover image pattern inside each polygon
+const PROJECT_BBOXES = [
+  { x: 1113, y:  64, w: 294, h: 382 }, // p0
+  { x:  715, y:   3, w: 250, h: 530 }, // p1
+  { x:  573, y: 554, w: 292, h: 292 }, // p2
+  { x:  300, y: 559, w: 273, h: 329 }, // p3
+  { x:   20, y: 539, w: 405, h: 323 }, // p4
+  { x:    0, y: 230, w: 356, h: 288 }, // p5
+  { x:  370, y: 210, w: 351, h: 314 }, // p6
+  { x:  849, y: 475, w: 281, h: 330 }, // p7
+  { x: 1172, y: 465, w: 322, h: 212 }, // p8
+] as const;
+
 export default function ProjectsSection() {
   const containerRef = useRef<HTMLElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -59,30 +73,42 @@ export default function ProjectsSection() {
             start: "top top",
             end: "+=900",
             scrub: 1.5,
-            onEnter: () => setIsVisible(false),
+            onEnter: (self) => {
+              // Scrolling DOWN: fast-forward through pin (0.4s) so user doesn't get stuck
+              setIsVisible(false);
+              const endPos = self.end;
+              requestAnimationFrame(() => {
+                (window as any).lenis?.scrollTo(endPos, {
+                  duration: 0.4,
+                  easing: (t: number) => t,
+                });
+              });
+            },
             onEnterBack: () => setIsVisible(false),
             onLeave: () => {
               setIsVisible(true);
-              const el = document.getElementById("blog-section");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
+              // After fast-forwarding through the pin, glide smoothly to blog
+              requestAnimationFrame(() => {
+                const blog = document.getElementById("blog-section");
+                if (blog) (window as any).lenis?.scrollTo(blog, { duration: 1.0 });
+              });
             },
-            onLeaveBack: () => {
-              setIsVisible(true);
-              const el = document.getElementById("about-section");
-              if (el) el.scrollIntoView({ behavior: "smooth" });
-            },
-            onUpdate: (self) => {
-              setIsScrolled(self.progress > 0.01);
-            },
+            onLeaveBack: () => setIsVisible(true),
+            onUpdate: (self) => setIsScrolled(self.progress > 0.01),
           },
         });
 
         tl.to(els, { x: 0, y: 0, opacity: 1, stagger: 0.12, duration: 1, ease: "power2.out" }, 0);
         tl.to(".projects-label", { x: 0, opacity: 1, duration: 0.6 }, 0);
 
+        // Track each polygon's original fill so cover images are properly restored on mouseleave
+        const originalFills = new Map<Element, string>();
+
         els.forEach((el) => {
           const attr = el.getAttribute("data-project");
           const isProject = attr !== null;
+          const originalFill = el.getAttribute("fill") ?? "#F3F293";
+          originalFills.set(el, originalFill);
 
           el.addEventListener("mouseenter", () => {
             if (isProject && projectTitleRef.current) {
@@ -109,7 +135,7 @@ export default function ProjectsSection() {
               gsap.to(projectTitleRef.current, { opacity: 0, y: 4, duration: 0.15 });
             }
             gsap.to(el, {
-              fill: "#F3F293",
+              fill: originalFills.get(el) ?? "#F3F293",
               scale: 1,
               transformOrigin: "center center",
               duration: 0.35,
@@ -138,7 +164,7 @@ export default function ProjectsSection() {
     <section
       ref={containerRef}
       id="projects-section"
-      className="w-full bg-bg mt-16 lg:mt-32 min-h-[60vw] lg:min-h-svh relative snap-start"
+      className="w-full bg-bg mt-16 lg:mt-32 min-h-[60vw] lg:min-h-svh relative"
     >
       <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
       <p
@@ -163,6 +189,29 @@ export default function ProjectsSection() {
             overflow="visible"
             xmlns="http://www.w3.org/2000/svg"
           >
+            <defs>
+              {PROJECTS.map((p, i) =>
+                p.cover ? (
+                  <pattern
+                    key={p.id}
+                    id={`cover-${i}`}
+                    patternUnits="userSpaceOnUse"
+                    x={PROJECT_BBOXES[i].x}
+                    y={PROJECT_BBOXES[i].y}
+                    width={PROJECT_BBOXES[i].w}
+                    height={PROJECT_BBOXES[i].h}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <image
+                      href={p.cover}
+                      width={PROJECT_BBOXES[i].w}
+                      height={PROJECT_BBOXES[i].h}
+                      preserveAspectRatio="xMidYMid slice"
+                    />
+                  </pattern>
+                ) : null,
+              )}
+            </defs>
             <path
               className="polygon"
               d="M1224.92 744L1168 722.645L1209.11 657L1285 687.845L1224.92 744Z"
@@ -203,55 +252,55 @@ export default function ProjectsSection() {
               className="polygon"
               data-project="0"
               d="M1113 256.969L1218.34 446L1407 425.522L1384.2 197.109L1180.6 64L1113 256.969Z"
-              fill="#F3F293"
+              fill={PROJECTS[0].cover ? "url(#cover-0)" : "#F3F293"}
             />
             <path
               className="polygon"
               data-project="1"
               d="M879.308 533L715 533L845.503 3L920.975 31.3507L965 398.334L879.308 533Z"
-              fill="#F3F293"
+              fill={PROJECTS[1].cover ? "url(#cover-1)" : "#F3F293"}
             />
             <path
               className="polygon"
               data-project="2"
               d="M689.011 846L590.362 728.411L573 557.946L803.443 554L865 761.557L689.011 846Z"
-              fill="#F3F293"
+              fill={PROJECTS[2].cover ? "url(#cover-2)" : "#F3F293"}
             />
             <path
               className="polygon"
               data-project="3"
               d="M573 773.873L300 888L526.582 559L573 773.873Z"
-              fill="#F3F293"
+              fill={PROJECTS[3].cover ? "url(#cover-3)" : "#F3F293"}
             />
             <path
               className="polygon"
               data-project="4"
               d="M286.323 862L20 763.524L20 550.817L277.656 539L425 626.446L286.323 862Z"
-              fill="#F3F293"
+              fill={PROJECTS[4].cover ? "url(#cover-4)" : "#F3F293"}
             />
             <path
               className="polygon"
               data-project="5"
               d="M303.347 510.918L6.287 518L0 363.77L289.987 230L356 408.623L356 433.016L303.347 510.918Z"
-              fill="#F3F293"
+              fill={PROJECTS[5].cover ? "url(#cover-5)" : "#F3F293"}
             />
             <path
               className="polygon"
               data-project="6"
               d="M664.209 524L390.508 496.456L370 263.514L647.645 210L721 332.767L664.209 524Z"
-              fill="#F3F293"
+              fill={PROJECTS[6].cover ? "url(#cover-6)" : "#F3F293"}
             />
             <path
               className="polygon"
               data-project="7"
               d="M1012.72 805L890.717 744.5L849 557.5L1107.96 475L1130 706L1012.72 805Z"
-              fill="#F3F293"
+              fill={PROJECTS[7].cover ? "url(#cover-7)" : "#F3F293"}
             />
             <path
               className="polygon"
               data-project="8"
               d="M1313.37 677C1268.08 663.077 1176.4 635.23 1172 635.23L1196.35 488.643L1424.1 465L1494 604.494L1494 623.409L1435.88 677L1313.37 677Z"
-              fill="#F3F293"
+              fill={PROJECTS[8].cover ? "url(#cover-8)" : "#F3F293"}
             />
           </svg>
         </div>

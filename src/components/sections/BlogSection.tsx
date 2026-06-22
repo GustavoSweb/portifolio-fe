@@ -40,17 +40,13 @@ export default function BlogSection() {
       mm.add("(min-width: 1024px)", () => {
         ScrollTrigger.create({
           trigger: containerRef.current,
-          pin: true,
           start: "top top",
-          end: "+=600",
-          pinSpacing: true,
           onEnter: () => setIsVisible(false),
           onEnterBack: () => setIsVisible(false),
           onLeave: () => setIsVisible(true),
           onLeaveBack: () => {
             setIsVisible(true);
-            const el = document.getElementById("projects-section");
-            if (el) el.scrollIntoView({ behavior: "smooth" });
+            (window as any).lenis?.scrollTo("#projects-section", { duration: 1.2 });
           },
         });
       });
@@ -79,7 +75,7 @@ export default function BlogSection() {
     <section
       ref={containerRef}
       id="blog-section"
-      className="w-full bg-bg mt-16 lg:mt-32 lg:min-h-svh snap-start"
+      className="w-full bg-bg mt-16 lg:mt-32 lg:min-h-svh"
     >
       <div className="content-wrap pb-12 lg:pb-20">
         <p className="blog-title font-condensed wdth-condensed font-medium italic text-[clamp(1.5rem,2.8vw,3rem)] text-white uppercase tracking-[-0.25px] whitespace-nowrap pb-6 lg:pb-8 pt-6">
