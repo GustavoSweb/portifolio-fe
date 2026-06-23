@@ -557,6 +557,15 @@ export default function ProjectModal({ project, onClose }: Props) {
                     </svg>
                   </a>
                 )}
+                {displayed.repoPrivate && (
+                  <span className="inline-flex items-center gap-2 px-6 py-3 border-2 border-bg/30 text-bg/50 font-sans font-semibold text-sm uppercase tracking-wider cursor-default select-none">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                      <rect x="1" y="5.5" width="11" height="7" rx="1" stroke="currentColor" strokeWidth="1.4" />
+                      <path d="M3.5 5.5V3.5a3 3 0 016 0v2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                    </svg>
+                    Repositório Privado
+                  </span>
+                )}
               </div>
             </div>
           )}

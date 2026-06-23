@@ -51,7 +51,10 @@ export default function ProjectsSection() {
         const project = PROJECTS[parseInt(attr)];
         if (!project) return;
         el.style.cursor = "pointer";
-        el.addEventListener("click", () => setActiveProject(project));
+        el.addEventListener("click", () => {
+          setActiveProject(project);
+          if (projectTitleRef.current) gsap.set(projectTitleRef.current, { opacity: 0 });
+        });
       });
 
       const mm = gsap.matchMedia();
@@ -101,27 +104,31 @@ export default function ProjectsSection() {
         tl.to(els, { x: 0, y: 0, opacity: 1, stagger: 0.12, duration: 1, ease: "power2.out" }, 0);
         tl.to(".projects-label", { x: 0, opacity: 1, duration: 0.6 }, 0);
 
-        // Track each polygon's original fill so cover images are properly restored on mouseleave
-        const originalFills = new Map<Element, string>();
+        const svg = svgRef.current;
+        const onMouseMove = (e: MouseEvent) => {
+          if (projectTitleRef.current) {
+            projectTitleRef.current.style.left = `${e.clientX}px`;
+            projectTitleRef.current.style.top = `${e.clientY}px`;
+          }
+        };
+        svg?.addEventListener("mousemove", onMouseMove);
 
         els.forEach((el) => {
           const attr = el.getAttribute("data-project");
           const isProject = attr !== null;
-          const originalFill = el.getAttribute("fill") ?? "#F3F293";
-          originalFills.set(el, originalFill);
+          const project = attr !== null ? PROJECTS[parseInt(attr)] : undefined;
 
           el.addEventListener("mouseenter", () => {
-            if (isProject && projectTitleRef.current) {
-              projectTitleRef.current.textContent = t(`p${parseInt(attr!) + 1}_title`);
+            if (isProject && project && projectTitleRef.current) {
+              projectTitleRef.current.textContent = project.title;
               gsap.to(projectTitleRef.current, {
                 opacity: 1,
-                y: 0,
                 duration: 0.2,
                 ease: "power2.out",
               });
             }
             gsap.to(el, {
-              fill: "#ffffff",
+              filter: "drop-shadow(0px 12px 28px rgba(0,0,0,0.5))",
               scale: 1.06,
               transformOrigin: "center center",
               duration: 0.2,
@@ -132,10 +139,10 @@ export default function ProjectsSection() {
 
           el.addEventListener("mouseleave", () => {
             if (isProject && projectTitleRef.current) {
-              gsap.to(projectTitleRef.current, { opacity: 0, y: 4, duration: 0.15 });
+              gsap.to(projectTitleRef.current, { opacity: 0, duration: 0.15 });
             }
             gsap.to(el, {
-              fill: originalFills.get(el) ?? "#F3F293",
+              filter: "drop-shadow(0px 0px 0px rgba(0,0,0,0))",
               scale: 1,
               transformOrigin: "center center",
               duration: 0.35,
@@ -144,6 +151,10 @@ export default function ProjectsSection() {
             });
           });
         });
+
+        return () => {
+          svg?.removeEventListener("mousemove", onMouseMove);
+        };
       });
 
       mm.add("(max-width: 1023px)", () => {
@@ -169,7 +180,8 @@ export default function ProjectsSection() {
       <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
       <p
         ref={projectTitleRef}
-        className="hidden lg:block absolute bottom-10 left-[55px] font-condensed wdth-condensed font-medium italic text-white/70 text-lg uppercase tracking-[0.2em] opacity-0 translate-y-1 pointer-events-none z-20"
+        className="hidden lg:block fixed bg-orange text-bg font-condensed wdth-condensed font-medium italic text-lg uppercase tracking-[0.2em] px-3 py-1 opacity-0 pointer-events-none z-[60]"
+        style={{ transform: "translate(18px, -50%)" }}
       />
 
       <div className="flex flex-col lg:flex-row lg:items-center max-w-[1728px] mx-auto px-5 md:px-8 lg:pl-[55px] lg:pr-0 gap-4 lg:gap-[14px] py-8 lg:py-0 lg:h-[888px]">
