@@ -17,15 +17,15 @@ const SVG_CY = 444;
 // Bounding boxes for each project polygon (in SVG viewBox coordinates 0 0 1494 888)
 // Used to correctly position the cover image pattern inside each polygon
 const PROJECT_BBOXES = [
-  { x: 1113, y:  64, w: 294, h: 382 }, // p0
-  { x:  715, y:   3, w: 250, h: 530 }, // p1
-  { x:  573, y: 554, w: 292, h: 292 }, // p2
-  { x:  300, y: 559, w: 273, h: 329 }, // p3
-  { x:   20, y: 539, w: 405, h: 323 }, // p4
-  { x:    0, y: 230, w: 356, h: 288 }, // p5
-  { x:  370, y: 210, w: 351, h: 314 }, // p6
-  { x:  849, y: 475, w: 281, h: 330 }, // p7
-  { x: 1172, y: 465, w: 322, h: 212 }, // p8
+  { x: 830, y: 70, w: 294, h: 382 }, // p0
+  { x: 613, y: 3, w: 614, h: 530 }, // p1
+  { x: 573, y: 554, w: 292, h: 292 }, // p2
+  { x: 300, y: 559, w: 273, h: 329 }, // p3
+  { x: 20, y: 539, w: 405, h: 323 }, // p4
+  { x: 0, y: 230, w: 356, h: 288 }, // p5
+  { x: 370, y: 240, w: 376, h: 288 }, // p6
+  { x: 849, y: 475, w: 281, h: 330 }, // p7
+  { x: 1172, y: 465, w: 300, h: 297 }, // p8
 ] as const;
 
 export default function ProjectsSection() {
@@ -213,12 +213,14 @@ export default function ProjectsSection() {
                     width={PROJECT_BBOXES[i].w}
                     height={PROJECT_BBOXES[i].h}
                   >
+                    <rect width={PROJECT_BBOXES[i].w} height={PROJECT_BBOXES[i].h} fill="#F3F293" />
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <image
                       href={p.cover}
                       width={PROJECT_BBOXES[i].w}
                       height={PROJECT_BBOXES[i].h}
                       preserveAspectRatio="xMidYMid slice"
+                      opacity="0.28"
                     />
                   </pattern>
                 ) : null,

@@ -32,21 +32,34 @@ export const PROJECTS: Project[] = [
   {
     id: "p1",
     type: "big",
-    title: "Projeto 1",
-    cover: undefined,
+    title: "Futcustom",
+    cover: "/project-futcustom.png",
     stages: [
-      { description: "Descrição do contexto do projeto." },
-      { description: "Descrição da abordagem utilizada." },
-      { description: "Descrição do resultado obtido." },
+      {
+        label: "Contexto",
+        description:
+          "Um cliente me procurou para criar uma plataforma de e-commerce onde torcedores pudessem encomendar cards de futebol personalizados no estilo FIFA — com nome, foto e time. O desafio era transformar um fluxo de customização visual em uma experiência de compra fluida, com entrega física e digital.",
+      },
+      {
+        label: "Stack & Decisões",
+        description:
+          "Desenvolvi toda a aplicação com Next.js App Router, TypeScript, Prisma e PostgreSQL. Escolhi Zustand para gerenciar o estado da customização em tempo real e RTK Query para as chamadas de API. Implementei pagamentos via PIX e cartão (Stripe), cálculo de frete com Melhor Envio, internacionalização em três idiomas com next-intl e rastreamento completo de funil via GTM/GA4 com server-side GTM.",
+      },
+      {
+        label: "Entrega",
+        description:
+          "Entreguei o produto completo — da autenticação ao pós-venda — incluindo painel administrativo, fluxo de checkout com múltiplos métodos de pagamento e entrega, e toda a infraestrutura de analytics. Foi o projeto em que mais tomei decisões de arquitetura de ponta a ponta, desde modelagem de banco até UX do fluxo de compra.",
+      },
     ],
-    tags: ["Next.js", "TypeScript"],
-    url: "#",
+    tags: ["Next.js", "TypeScript", "React", "Docker"],
+    url: "https://futcustom.com/",
+    repoPrivate: true,
   },
   {
     id: "p2",
     type: "big",
     title: "FutBuyNow",
-    cover: undefined,
+    cover: "/project-futbuynow.png",
     stages: [
       {
         label: "Contexto",
@@ -125,7 +138,7 @@ export const PROJECTS: Project[] = [
     id: "p7",
     type: "small",
     title: "São João Arcoverde",
-    cover: undefined,
+    cover: "/project-sao-joao.png",
     description:
       "Desenvolvi uma plataforma municipal para o São João de Arcoverde, um dos maiores festivais juninos de Pernambuco. O sistema orienta turistas sobre atrações, programações e opções de transporte durante o evento, reduzindo a dependência de informações dispersas em redes sociais.",
     tags: ["React", "TypeScript"],
@@ -145,7 +158,7 @@ export const PROJECTS: Project[] = [
     id: "p9",
     type: "small",
     title: "Startup Design",
-    cover: undefined,
+    cover: "/project-startup.png",
     description:
       "Desenvolvi um modelo de interface de alto impacto para empresas de tecnologia, explorando tipografia expressiva, hierarquia visual forte e uma paleta que comunica inovação. Funciona como referência de design para startups que querem uma presença digital diferenciada e memorável.",
     tags: ["Next.js", "TypeScript"],
