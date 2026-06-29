@@ -85,7 +85,7 @@ export const PROJECTS: Project[] = [
     id: "p3",
     type: "small",
     title: "Frontend News",
-    cover: undefined,
+    cover: "./project-frontend-news.png",
     description:
       "Desenvolvi uma plataforma de newsletter voltada para desenvolvedores frontend, centralizando atualizações relevantes de bibliotecas como React, Vue e Next.js. O objetivo foi criar um canal curado que poupa tempo de quem acompanha o ecossistema de perto e não quer perder nenhuma novidade importante.",
     tags: ["Next.js", "TypeScript"],
@@ -95,7 +95,7 @@ export const PROJECTS: Project[] = [
     id: "p4",
     type: "small",
     title: "ByteFlow",
-    cover: undefined,
+    cover: "./project-byteflow.png",
     description:
       "Criei a identidade digital da ByteFlow, empresa de soluções tecnológicas que atua desde aplicativos mobile até plataformas web. O site foi construído para transmitir credibilidade técnica e apresentar o portfólio de serviços de forma clara, convertendo visitantes em potenciais clientes.",
     tags: ["React", "TypeScript"],
@@ -128,7 +128,7 @@ export const PROJECTS: Project[] = [
     id: "p6",
     type: "small",
     title: "Ecommerce Book",
-    cover: undefined,
+    cover: "./project-ecommerce-book.png",
     description:
       "Construí uma plataforma de compra e venda de ebooks digitais com foco em uma experiência de compra fluida e entrega imediata dos arquivos. O projeto explorou UX para e-commerce digital, integração de pagamento e gerenciamento de licenças por usuário.",
     tags: ["Next.js", "Node.js"],
@@ -148,7 +148,7 @@ export const PROJECTS: Project[] = [
     id: "p8",
     type: "small",
     title: "Biomedicina em Ação",
-    cover: undefined,
+    cover: "./project-biomedicina.png",
     description:
       "Construí um blog informativo para um evento estudantil na Escola Técnica Estadual Jornalista Cyl Galindo. O projeto reuniu artigos de biomedicina produzidos pelos alunos em um espaço digital próprio, tornando o conteúdo acessível além dos muros da escola.",
     tags: ["React"],
