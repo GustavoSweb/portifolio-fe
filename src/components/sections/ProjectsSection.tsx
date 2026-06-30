@@ -14,18 +14,16 @@ gsap.registerPlugin(ScrollTrigger);
 const SVG_CX = 747;
 const SVG_CY = 444;
 
-// Bounding boxes for each project polygon (in SVG viewBox coordinates 0 0 1494 888)
-// Used to correctly position the cover image pattern inside each polygon
 const PROJECT_BBOXES = [
-  { x: 830, y: 70, w: 294, h: 382 }, // p0
-  { x: 613, y: 3, w: 614, h: 530 }, // p1
-  { x: 583, y: 554, w: 492, h: 292 }, // p2
-  { x: 10, y: 269, w: 373, h: 329 }, // p3
-  { x: 20, y: 539, w: 405, h: 323 }, // p4
-  { x: 0, y: 245, w: 356, h: 288 }, // p5
-  { x: 370, y: 240, w: 376, h: 288 }, // p6
-  { x: 860, y: 485, w: 381, h: 330 }, // p7
-  { x: 1172, y: 465, w: 300, h: 297 }, // p8
+  { x: 830, y: 70, w: 294, h: 382 },
+  { x: 0, y: 100, w: 712, h: 382 },
+  { x: 583, y: 554, w: 492, h: 292 },
+  { x: 10, y: 269, w: 373, h: 329 },
+  { x: 20, y: 539, w: 405, h: 423 },
+  { x: 0, y: 245, w: 356, h: 288 },
+  { x: 370, y: 240, w: 376, h: 288 },
+  { x: 860, y: 485, w: 381, h: 330 },
+  { x: 1172, y: 465, w: 300, h: 297 },
 ] as const;
 
 export default function ProjectsSection() {

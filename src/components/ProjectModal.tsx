@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { type Project } from "@/data/projects";
 import { useHeaderStore } from "@/store/useHeaderStore";
@@ -115,6 +116,32 @@ export default function ProjectModal({ project, onClose }: Props) {
   const [displayed, setDisplayed] = useState<Project | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [track, setTrack] = useState<TrackState>(EMPTY_TRACK);
+
+  // Mobile screens carousel refs/state
+  const screensRef = useRef<HTMLDivElement | null>(null);
+  const [mobileIndex, setMobileIndex] = useState(0);
+
+  useEffect(() => {
+    const el = screensRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const children = Array.from(el.children) as HTMLElement[];
+        if (!children.length) return;
+        // gap from tailwind gap-4 = 16px
+        const itemWidth = children[0].getBoundingClientRect().width + 16;
+        const idx = Math.round(el.scrollLeft / itemWidth);
+        setMobileIndex(Math.min(Math.max(idx, 0), children.length - 1));
+      });
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [displayed?.screens]);
 
   const setExpandedState = (value: boolean) => {
     isExpandedRef.current = value;
@@ -302,10 +329,12 @@ export default function ProjectModal({ project, onClose }: Props) {
     };
   }, [displayed]);
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <div
       ref={backdropRef}
-      className="fixed inset-0 bg-black/60 z-50 opacity-0"
+      className="fixed inset-0 bg-black/60 z-[70] opacity-0"
       style={{ pointerEvents: "none" }}
       onClick={onClose}
     >
@@ -502,16 +531,60 @@ export default function ProjectModal({ project, onClose }: Props) {
                     <div className="dots-pattern w-full h-full opacity-20" />
                   </div>
                 </div>
+              ) : displayed.type === "mobile" ? (
+                /* Mobile project: horizontal device mockups on desktop + text below */
+                <div className="modal-reveal">
+                  <div
+                    ref={screensRef}
+                    className="flex gap-4 overflow-x-auto snap-x snap-mandatory lg:overflow-visible mb-4 lg:mb-8 px-4 lg:px-0 justify-start lg:justify-center"
+                    style={{ WebkitOverflowScrolling: "touch" }}
+                  >
+                    {displayed.screens.slice(0, 3).map((src, i) => (
+                      <div
+                        key={i}
+                        className={`flex-shrink-0 w-[60vw] aspect-[375/667] sm:w-[300px] md:w-[375px] lg:w-[320px] lg:max-w-[375px] overflow-hidden rounded-xl shadow-sm relative snap-center transition-transform duration-300 ${i === 1 ? "lg:scale-100 lg:shadow-lg" : "lg:scale-95"}`}
+                        aria-hidden={false}
+                      >
+                        {src ? (
+                          <Image src={src} alt={`${displayed.title} screenshot ${i + 1}`} fill className="object-cover" />
+                        ) : (
+                          <div className="relative w-full h-full bg-gray-900">
+                            <ImagePlaceholder />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Dots for mobile scroll position */}
+                  <div className="flex justify-center gap-2 mb-4 lg:hidden">
+                    {displayed.screens.slice(0, 3).map((_s, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          const el = screensRef.current;
+                          if (!el) return;
+                          const itemWidth = (el.children[0] as HTMLElement).getBoundingClientRect().width + 16;
+                          el.scrollTo({ left: i * itemWidth, behavior: "smooth" });
+                        }}
+                        className={`w-2 h-2 rounded-full ${mobileIndex === i ? "bg-white" : "bg-white/30"}`}
+                        aria-label={`Tela ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+
+                  <p className="font-sans font-semibold text-sm lg:text-base text-bg leading-7 max-w-[840px] px-4 lg:px-0 mb-16 text-center lg:text-left">
+                    {displayed.description}
+                  </p>
+                </div>
               ) : (
                 /* Small project: banner + description */
                 <div className="modal-reveal">
-                  <div className="relative w-full bg-[#e5512d] aspect-video lg:ml-[4.35%] lg:w-[91.3%] overflow-hidden mb-8 lg:mb-12">
-                    {displayed.banner ? (
-                      <Image src={displayed.banner} alt={displayed.title} fill className="object-cover" />
-                    ) : (
-                      <ImagePlaceholder />
-                    )}
-                  </div>
+                  {displayed.banner && (
+                    <div className="relative w-full bg-[#e5512d] aspect-video lg:ml-[4.35%] lg:w-[91.3%] overflow-hidden mb-8 lg:mb-12">
+                      <Image src={displayed.banner} alt={displayed.title} fill className="object-cover" unoptimized />
+                    </div>
+                  )}
                   <p className="font-sans font-semibold text-sm lg:text-base text-bg leading-7 max-w-[640px] px-4 lg:px-0 mb-16">
                     {displayed.description}
                   </p>
@@ -596,6 +669,8 @@ export default function ProjectModal({ project, onClose }: Props) {
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
+

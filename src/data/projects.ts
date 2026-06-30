@@ -26,7 +26,15 @@ export interface ProjectSmall extends ProjectBase {
   description: string;
 }
 
-export type Project = ProjectBig | ProjectSmall;
+export interface ProjectMobile extends ProjectBase {
+  type: "mobile";
+  // Screens intended for device mockups (ordered). Prefer at least 2 images for a better layout.
+  screens: string[];
+  // Short description shown below the device mockups
+  description: string;
+}
+
+export type Project = ProjectBig | ProjectSmall | ProjectMobile;
 
 export const PROJECTS: Project[] = [
   {
@@ -39,6 +47,7 @@ export const PROJECTS: Project[] = [
         label: "Contexto",
         description:
           "Um cliente me procurou para criar uma plataforma de e-commerce onde torcedores pudessem encomendar cards de futebol personalizados no estilo FIFA — com nome, foto e time. O desafio era transformar um fluxo de customização visual em uma experiência de compra fluida, com entrega física e digital.",
+        image: "/futcustom-step01.png",
       },
       {
         label: "Stack & Decisões",
@@ -56,30 +65,29 @@ export const PROJECTS: Project[] = [
     repoPrivate: true,
   },
   {
-    id: "p2",
+    id: "p10",
     type: "big",
-    title: "FutBuyNow",
-    cover: "/project-futbuynow.png",
+    title: "TeflyClass",
+    cover: "/project-tefly-class.png",
     stages: [
       {
-        label: "Contexto",
         description:
-          "Assumi como freelancer a manutenção e evolução contínua da FutBuyNow, uma plataforma de compra e venda de coins do FC voltada para jogadores globais. O produto já existia, mas acumulava débitos técnicos, gargalos de performance e falta de ferramentas internas para análise e gestão do negócio.",
+          "A ETEJCG não tinha uma plataforma centralizada para gestão acadêmica. Representantes de turma e alunos dependiam de grupos informais para compartilhar atividades, projetos e avisos, tornando o fluxo de informação desorganizado e difícil de rastrear.",
+        image: "/teflyclass-step01.png",
       },
       {
-        label: "Abordagem Técnica",
         description:
-          "Trabalhei em um monorepo com três aplicações independentes — API Node/Express com Prisma, dashboard React/Vite e loja Next.js com 16 locales via next-intl. Os maiores desafios foram otimizar o sitemap que entrava em timeout em produção (reduzi de ~30s para 2.8s com 1000+ posts) e estruturar configuração dinâmica de bônus via painel admin, filtros no dashboard de pedidos e integração de webhooks do Stripe.",
+          "Desenvolvi um sistema com controle de acesso baseado em funções, onde representantes de turma e alunos autorizados podem fazer upload de atividades, projetos e comunicados de forma estruturada, centralizando essa responsabilidade dentro da própria plataforma.",
       },
       {
-        label: "Resultado",
         description:
-          "Entreguei melhorias mensuráveis, com CLS caindo de 0.47 para 0.1 e o endpoint de sitemap passando de timeout para 2.8s em produção. Além disso, estruturei Docker e GitHub Actions para deploy automatizado no stage, e implementei dezenas de features que aumentaram a operabilidade da plataforma.",
+          "A plataforma passou a organizar o fluxo acadêmico da escola, reduzindo a dependência de meios informais e dando mais visibilidade e controle sobre as demandas de cada turma para alunos e representantes.",
       },
     ],
-    tags: ["Next.js", "React", "Node.js", "TypeScript", "Docker"],
-    url: "https://www.futbuynow.com/",
-    repoPrivate: true,
+    tags: ["Nuxt", "Vue", "Node.js"],
+    url: "#",
+
+    repo: "https://github.com/GustavoSweb/TeflyClass",
   },
   {
     id: "p3",
@@ -99,30 +107,36 @@ export const PROJECTS: Project[] = [
     description:
       "Criei a identidade digital da ByteFlow, empresa de soluções tecnológicas que atua desde aplicativos mobile até plataformas web. O site foi construído para transmitir credibilidade técnica e apresentar o portfólio de serviços de forma clara, convertendo visitantes em potenciais clientes.",
     tags: ["React", "TypeScript"],
-    url: "#",
+    url: "https://byteflow-fe.vercel.app/",
+    repo: "https://github.com/GustavoSweb/byteflow-fe",
+    banner: "/byteflow-step01.png",
   },
   {
-    id: "p10",
+    id: "p2",
     type: "big",
-    title: "TeflyClass",
-    cover: "/project-tefly-class.png",
+    title: "FutBuyNow",
+    cover: "/project-futbuynow.png",
     stages: [
       {
+        label: "Contexto",
         description:
-          "A ETEJCG não tinha uma plataforma centralizada para gestão acadêmica. Representantes de turma e alunos dependiam de grupos informais para compartilhar atividades, projetos e avisos, tornando o fluxo de informação desorganizado e difícil de rastrear.",
+          "Assumi como freelancer a manutenção e evolução contínua da FutBuyNow, uma plataforma de compra e venda de coins do FC voltada para jogadores globais. O produto já existia, mas acumulava débitos técnicos, gargalos de performance e falta de ferramentas internas para análise e gestão do negócio.",
+        image: "/futbuynow-step01.png",
       },
       {
+        label: "Abordagem Técnica",
         description:
-          "Desenvolvi um sistema com controle de acesso baseado em funções, onde representantes de turma e alunos autorizados podem fazer upload de atividades, projetos e comunicados de forma estruturada, centralizando essa responsabilidade dentro da própria plataforma.",
+          "Trabalhei em um monorepo com três aplicações independentes — API Node/Express com Prisma, dashboard React/Vite e loja Next.js com 16 locales via next-intl. Os maiores desafios foram otimizar o sitemap que entrava em timeout em produção (reduzi de ~30s para 2.8s com 1000+ posts) e estruturar configuração dinâmica de bônus via painel admin, filtros no dashboard de pedidos e integração de webhooks do Stripe.",
       },
       {
+        label: "Resultado",
         description:
-          "A plataforma passou a organizar o fluxo acadêmico da escola, reduzindo a dependência de meios informais e dando mais visibilidade e controle sobre as demandas de cada turma para alunos e representantes.",
+          "Entreguei melhorias mensuráveis, com CLS caindo de 0.47 para 0.1 e o endpoint de sitemap passando de timeout para 2.8s em produção. Além disso, estruturei Docker e GitHub Actions para deploy automatizado no stage, e implementei dezenas de features que aumentaram a operabilidade da plataforma.",
       },
     ],
-    tags: ["Nuxt", "Vue", "Node.js"],
-    url: "#",
-    repo: "https://github.com/GustavoSweb/TeflyClass",
+    tags: ["Next.js", "React", "Node.js", "TypeScript", "Docker"],
+    url: "https://www.futbuynow.com/",
+    repoPrivate: true,
   },
   {
     id: "p6",
@@ -133,14 +147,16 @@ export const PROJECTS: Project[] = [
       "Construí uma plataforma de compra e venda de ebooks digitais com foco em uma experiência de compra fluida e entrega imediata dos arquivos. O projeto explorou UX para e-commerce digital, integração de pagamento e gerenciamento de licenças por usuário.",
     tags: ["Next.js", "Node.js"],
     url: "#",
+    banner: "/ecommerce-book-step01.png",
   },
   {
     id: "p7",
-    type: "small",
+    type: "mobile",
     title: "São João Arcoverde",
     cover: "/project-sao-joao.png",
+    screens: ["/screens/sao-joao-1.png", "/screens/sao-joao-2.png", "/screens/sao-joao-3.png"],
     description:
-      "Desenvolvi uma plataforma municipal para o São João de Arcoverde, um dos maiores festivais juninos de Pernambuco. O sistema orienta turistas sobre atrações, programações e opções de transporte durante o evento, reduzindo a dependência de informações dispersas em redes sociais.",
+      "Plataforma mobile para visitantes do São João de Arcoverde — diretório de atrações, programação e logística para turistas. Projetada com foco em descoberta rápida, mapas e notificações de última hora.",
     tags: ["React", "TypeScript"],
     url: "#",
   },
@@ -150,7 +166,7 @@ export const PROJECTS: Project[] = [
     title: "Biomedicina em Ação",
     cover: "./project-biomedicina.png",
     description:
-      "Construí um blog informativo para um evento estudantil na Escola Técnica Estadual Jornalista Cyl Galindo. O projeto reuniu artigos de biomedicina produzidos pelos alunos em um espaço digital próprio, tornando o conteúdo acessível além dos muros da escola.",
+      "Um dos meus primeiros projetos com React, desenvolvido para um evento estudantil na ETEJCG. Construí um blog que centralizou artigos de biomedicina produzidos pelos alunos, oferecendo uma plataforma digital própria que tornou o conteúdo acessível além dos muros da escola. Foi uma excelente oportunidade para aprender sobre estruturação de componentes React e gerenciamento de conteúdo.",
     tags: ["React"],
     url: "#",
   },
@@ -163,5 +179,6 @@ export const PROJECTS: Project[] = [
       "Desenvolvi um modelo de interface de alto impacto para empresas de tecnologia, explorando tipografia expressiva, hierarquia visual forte e uma paleta que comunica inovação. Funciona como referência de design para startups que querem uma presença digital diferenciada e memorável.",
     tags: ["Next.js", "TypeScript"],
     url: "#",
+    banner: "/startup-step01.png",
   },
 ];
