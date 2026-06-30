@@ -141,7 +141,7 @@ export default function ProjectModal({ project, onClose }: Props) {
       el.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
     };
-  }, [displayed?.screens]);
+  }, [displayed?.type === "mobile" ? (displayed as any).screens : null]);
 
   const setExpandedState = (value: boolean) => {
     isExpandedRef.current = value;
